@@ -6,13 +6,30 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 
 const app = express();
-
+const morgan = require("morgan");
+const cors = require("cors");
 const adminRoutes = require("./routes/admin");
 // const userRoutes = require("./routes/user");
 // const errorController = require("./controllers/error");
 const User = require("./models/user");
-
+app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cors());
+app.use((req, res, next) => {
+  res.header("Access-Controll-Allow-Origin", "*");
+  res.header(
+    "Access-Controll-Allow-Headers",
+    "Origin, X-Requested-With, Accept, Authorization, Content-Type"
+  );
+  if (req.method === "OPTIONS") {
+    res.header(
+      "Access-Controll-Allow-Methods",
+      "PUT, PUSH, PATCH, GET, DELETE"
+    );
+    res.status(200).json({});
+  }
+  next();
+});
 
 app.use((req, res, next) => {
   User.findById("6327529f6254e697e3639158")
