@@ -13,9 +13,7 @@ exports.readUsers = (req, res, next) => {
 exports.readRoles = (req, res, next) => {
   Role.find()
     .then((roles) => {
-      res.json({
-        roles: roles,
-      });
+      res.json(roles);
     })
     .catch((err) => console.log(err));
 };
