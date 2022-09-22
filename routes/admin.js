@@ -10,7 +10,7 @@ router.get("/users", adminController.readUsers);
 
 router.post("/add-user", adminController.createUser);
 
-router.patch("/edit-user", adminController.updateUser);
+router.patch("/edit-user/:userId", adminController.updateUser);
 
 router.delete("/delete-user/:userId", adminController.deleteUser);
 
