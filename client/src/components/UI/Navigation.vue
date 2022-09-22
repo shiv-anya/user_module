@@ -2,17 +2,22 @@
   <header>
     <nav>
       <ul>
-        <li class="active"><router-link to="/">Dashboard</router-link></li>
-        <li>Users</li>
+        <li><router-link to="/">Dashboard</router-link></li>
+        <li>
+          <router-link to="/admin/users">Users</router-link>
+        </li>
         <li><router-link to="/admin/roles">Roles</router-link></li>
       </ul>
-      <button>Login</button>
+      <Button name="Login" color="rgb(0, 195, 255)" />
     </nav>
   </header>
 </template>
 
 <script>
-export default {};
+import Button from "./Button.vue";
+export default {
+  components: { Button },
+};
 </script>
 
 <style scoped>

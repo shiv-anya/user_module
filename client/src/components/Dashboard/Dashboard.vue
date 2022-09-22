@@ -1,28 +1,25 @@
 <template>
-    
-    <Card value="28" title="Users" class="card"/>
-    <RolesList/>
-  </template>
+  <Card value="28" title="Users" class="card" />
+  <RolesList />
+</template>
 
   <script>
+import Card from "../UI/Card.vue";
+import RolesList from "../roles/RolesList.vue";
 
-import Card from '../UI/Card.vue';
-import RolesList from '../roles/RolesList.vue';
-
-
-export default ({
-    name: 'Dashboard',
-    components: {
-        Navigation,
-      Card,
-        RolesList
+export default {
+  name: "Dashboard",
+  components: {
+    Navigation,
+    Card,
+    RolesList,
   },
-    })
-  </script>
+};
+</script>
 
   <style scoped>
-  .card{
-    text-align: center;
-    font-size: 2rem;
-  }
-  </style>
+.card {
+  text-align: center;
+  font-size: 2rem;
+}
+</style>
