@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <Button name="Add Role" color="rgb(0, 195, 255)" class="left" />
+    <router-link to="/admin/add-role">Add Role</router-link>
     <RolesList />
   </div>
 </template>
@@ -22,7 +22,16 @@ export default {
   margin: 0 auto;
   padding: 2rem 0;
 }
-.left {
+a {
+  background-color: rgb(0, 195, 255);
+  border: none;
+  border-radius: 10px;
+  padding: 10px 20px;
+  text-align: center;
+  cursor: pointer;
+  width: 100px;
+  color: #fff;
   margin-left: 15px;
+  text-decoration: none;
 }
 </style>
