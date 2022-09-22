@@ -1,5 +1,8 @@
+const mongodb = require("mongodb");
 const User = require("../models/user");
 const Role = require("../models/role");
+
+const ObjectId = new mongodb.ObjectId();
 
 exports.readUsers = (req, res, next) => {
   User.find()
@@ -39,14 +42,12 @@ exports.createUser = (req, res, next) => {
     email: email,
     password: password,
     role: role,
-    accessType: "user",
+    accessType: accessType,
   });
   user
     .save()
     .then((result) => {
-      res.json({
-        message: "Created User",
-      });
+      res.redirect("/admin/users");
     })
     .catch((err) => console.log(err));
 };
@@ -120,14 +121,14 @@ exports.updateUser = (req, res, next) => {
 };
 
 exports.deleteUser = (req, res, next) => {
-  console.log("deleting user");
-  const userId = req.params.userId;
-  User.findByIdAndRemove(userId)
+  const id = req.params.userId;
+  User.remove({ _id: id })
+    .exec()
     .then((result) => {
-      console.log("Destroyed user");
-      res.json({
-        message: "deleted user",
-      });
+      res
+        .status(200)
+        .json({ message: "User Deleted" })
+        .redirect("/admin/users");
     })
     .catch((err) => console.log(err));
 };
@@ -137,9 +138,6 @@ exports.deleteRole = (req, res, next) => {
   Role.findByIdAndRemove(roleId)
     .then((result) => {
       console.log("Destroyed role");
-      res.json({
-        message: "deleted role",
-      });
     })
     .catch((err) => console.log(err));
 };
