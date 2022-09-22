@@ -38,11 +38,10 @@
       </div>
       <div class="inner">
         <label for="roles">Roles</label>
-        <select name="roles" id="roles" v-model="role">
-          <option value="Accountant">Accountant</option>
-          <option value="Finance">Finance</option>
-          <option value="Engineer">Engineer</option>
-          <option value="Analyst">Analyst</option>
+        <select name="roles" id="roles" v-model="roles">
+          <option v-for="role in roles" :value="role" :key="role._id">
+            {{ role.name }}
+          </option>
         </select>
       </div>
       <div class="inner">
@@ -69,6 +68,7 @@ export default {
       password: "",
       role: "",
       accessType: "",
+      roles: [],
     };
   },
   methods: {
@@ -94,9 +94,20 @@ export default {
           console.log(err);
         });
     },
+    getResults() {
+      fetch("http://localhost:4000/admin/roles")
+        .then((res) => res.json())
+        .then((data) => {
+          this.roles = [...data];
+        })
+        .catch((err) => console.log(err));
+    },
   },
   components: {
     Button,
+  },
+  mounted() {
+    this.getResults();
   },
 };
 </script>
