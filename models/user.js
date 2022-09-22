@@ -21,11 +21,10 @@ const userSchema = new Schema({
   },
   role: {
     type: String,
-    required: true,
   },
   accessType: {
     type: String,
-    required: true,
+    default: "user",
   },
 });
 
