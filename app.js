@@ -13,7 +13,8 @@ const adminRoutes = require("./routes/admin");
 // const errorController = require("./controllers/error");
 const User = require("./models/user");
 app.use(morgan("dev"));
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 app.use(cors());
 app.use((req, res, next) => {
   res.header("Access-Controll-Allow-Origin", "*");
@@ -31,14 +32,14 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use((req, res, next) => {
-  User.findById("6327529f6254e697e3639158")
-    .then((user) => {
-      req.user = user;
-      next();
-    })
-    .catch((err) => console.log(err));
-});
+// app.use((req, res, next) => {
+//   User.findById("6327529f6254e697e3639158")
+//     .then((user) => {
+//       req.user = user;
+//       next();
+//     })
+//     .catch((err) => console.log(err));
+// });
 
 app.use("/admin", adminRoutes);
 // app.use(userRoutes);
@@ -51,7 +52,7 @@ mongoose
   )
   .then(() => {
     console.log("here");
-    app.listen(3000);
+    app.listen(4000);
   })
   .catch((err) => {
     console.log("here too");
