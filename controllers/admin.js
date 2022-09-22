@@ -55,8 +55,20 @@ exports.createUser = (req, res, next) => {
 exports.createRole = (req, res, next) => {
   console.log("creating role");
   const name = req.body.name;
+  const member = req.body.member;
+  let quantity;
+  console.log(member);
+  if (Object.keys(member).length === 0) {
+    quantity = 0;
+  } else {
+    quantity = 1;
+  }
   const role = new Role({
     name: name,
+    members: {
+      users: [member],
+      quantity: quantity,
+    },
   });
   role
     .save()
@@ -135,9 +147,13 @@ exports.deleteUser = (req, res, next) => {
 exports.deleteRole = (req, res, next) => {
   console.log("deleting role");
   const roleId = req.params.roleId;
-  Role.findByIdAndRemove(roleId)
+  Role.remove({ _id: roleId })
+    .exec()
     .then((result) => {
-      console.log("Destroyed role");
+      res
+        .status(200)
+        .json({ message: "User Deleted" })
+        .redirect("/admin/roles");
     })
     .catch((err) => console.log(err));
 };
