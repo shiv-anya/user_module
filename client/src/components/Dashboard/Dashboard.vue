@@ -1,5 +1,5 @@
 <template>
-  <Card value="28" title="Users" class="card" />
+  <Card :value="quantity" title="Users" class="card" />
   <RolesList />
 </template>
 
@@ -9,10 +9,30 @@ import RolesList from "../roles/RolesList.vue";
 
 export default {
   name: "Dashboard",
+  data() {
+    return {
+      quantity: 0,
+    };
+  },
   components: {
     Navigation,
     Card,
     RolesList,
+  },
+  methods: {
+    getResults() {
+      fetch("http://localhost:4000/admin/users")
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          this.quantity = [...data.users].length;
+          console.log(this.quantity);
+        })
+        .catch((err) => console.log(err));
+    },
+  },
+  mounted() {
+    this.getResults();
   },
 };
 </script>
