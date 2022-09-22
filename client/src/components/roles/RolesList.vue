@@ -3,9 +3,18 @@
     <ul>
       <li v-for="role in roles" :key="role._id">
         <div class="card">
-          <h3>{{ role.members.length }}</h3>
+          <h3>{{ role.members.quantity }}</h3>
           <p>{{ role.name }}</p>
-          <Button name="Manage Users" color="#333" />
+          <div class="actions">
+            <form
+              @submit="deleteRole(role._id)"
+              method="DELETE"
+              :action="`/admin/delete-role/${role._id}`"
+            >
+              <Button class="btn" name="Delete" color="#F11E1B" type="submit" />
+              <router-link :to="`/admin/roles/${role._id}`">Manage</router-link>
+            </form>
+          </div>
         </div>
       </li>
     </ul>
@@ -30,6 +39,14 @@ export default {
         .then((data) => {
           this.roles = [...data];
         })
+        .catch((err) => console.log(err));
+    },
+    deleteRole(roleId) {
+      fetch(`http://localhost:4000/admin/delete-role/${roleId}`, {
+        method: "DELETE",
+      })
+        .then((res) => res.json())
+        .then((data) => console.log(data))
         .catch((err) => console.log(err));
     },
   },
@@ -68,5 +85,15 @@ li {
 }
 ul li button {
   color: #000;
+}
+a,
+.btn {
+  background-color: #f4f4f4;
+  text-decoration: none;
+  font-size: 1rem;
+  padding: 10px 20px;
+  color: #000;
+  border-radius: 20px;
+  margin-top: 15px;
 }
 </style>
