@@ -24,9 +24,7 @@ export default {
       fetch("http://localhost:4000/admin/users")
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
           this.quantity = [...data.users].length;
-          console.log(this.quantity);
         })
         .catch((err) => console.log(err));
     },
