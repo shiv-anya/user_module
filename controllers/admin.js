@@ -21,14 +21,21 @@ exports.readRoles = (req, res, next) => {
     .catch((err) => console.log(err));
 };
 
-// exports.getAddProduct = (req, res, next) => {
-//   res.render("admin/edit-product", {
-//     pageTitle: "Add Product",
-//     path: "/admin/edit-product",
-//     editing: false,
-//   });
-// };
-
+exports.getSingleUser = (req, res, next) => {
+  User.find({ _id: req.params.userId })
+    .exec()
+    .then((result) => {
+      if (result.length < 1) {
+        return res.status(400).json({
+          message: "User not Found",
+        });
+      }
+      return res.status(200).json({
+        user: result[0],
+      });
+    })
+    .catch((err) => console.log(err));
+};
 exports.createUser = (req, res, next) => {
   const firstName = req.body.firstName;
   const lastName = req.body.lastName;
@@ -105,7 +112,6 @@ exports.createRole = (req, res, next) => {
 
 exports.updateUser = (req, res, next) => {
   const userId = req.params.userId;
-  console.log(userId);
   const updatedFirstName = req.body.firstName;
   const updatedLastName = req.body.lastName;
   const updatedEmail = req.body.email;
