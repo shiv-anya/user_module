@@ -12,7 +12,9 @@
               :action="`/admin/delete-role/${role._id}`"
             >
               <Button class="btn" name="Delete" color="#F11E1B" type="submit" />
-              <router-link :to="`/admin/roles/${role._id}`">Manage</router-link>
+              <router-link :to="`/admin/edit-role/${role._id}`"
+                >Manage</router-link
+              >
             </form>
           </div>
         </div>
@@ -67,6 +69,10 @@ ul {
   flex-direction: row;
   flex-wrap: wrap;
 }
+form {
+  width: 280px;
+  text-align: center;
+}
 .card {
   display: flex;
   flex-direction: column;
@@ -91,7 +97,7 @@ a,
   background-color: #f4f4f4;
   text-decoration: none;
   font-size: 1rem;
-  padding: 10px 20px;
+  padding: 10px 35px;
   color: #000;
   border-radius: 20px;
   margin-top: 15px;
