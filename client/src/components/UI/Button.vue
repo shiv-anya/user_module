@@ -17,7 +17,7 @@ button {
   padding: 10px 20px;
   text-align: center;
   cursor: pointer;
-  width: 100px;
+  width: 120px;
   margin-right: 12px;
   color: #fff;
 }

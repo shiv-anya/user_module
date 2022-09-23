@@ -38,8 +38,8 @@
       </div>
       <div class="inner">
         <label for="roles">Roles</label>
-        <select name="roles" id="roles" v-model="roles">
-          <option v-for="role in roles" :value="role" :key="role._id">
+        <select name="roles" id="roles" v-model="role">
+          <option v-for="role in roles" :value="role.name" :key="role._id">
             {{ role.name }}
           </option>
         </select>
@@ -106,7 +106,7 @@ export default {
   components: {
     Button,
   },
-  mounted() {
+  created() {
     this.getResults();
   },
 };
@@ -124,7 +124,7 @@ export default {
 .outer {
   width: 900px;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
 }
 .inner {
   display: flex;
