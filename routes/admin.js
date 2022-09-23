@@ -14,11 +14,13 @@ router.patch("/edit-user/:userId", adminController.updateUser);
 
 router.delete("/delete-user/:userId", adminController.deleteUser);
 
+router.get("/users/:userId", adminController.getSingleUser);
+
 router.get("/roles", adminController.readRoles);
 
 router.post("/add-role", adminController.createRole);
 
-// router.patch("/edit-role", adminController.updateRole);
+router.patch("/edit-role/:roleId", adminController.updateRole);
 
 router.delete("/delete-role/:roleId", adminController.deleteRole);
 
