@@ -5,6 +5,9 @@ import RolesPage from "./pages/RolesPage";
 import UsersList from "./components/users/UsersList";
 import UserForm from "./components/users/UserForm";
 import RolesForm from "./components/roles/RolesForm";
+import UserInfo from "./components/users/UserInfo";
+import UserEditForm from "./components/users/UserEditForm";
+import RoleEdit from "./components/roles/RoleEdit";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -20,6 +23,10 @@ const router = createRouter({
       component: UsersList,
     },
     {
+      path: "/admin/users/:userId",
+      component: UserInfo,
+    },
+    {
       path: "/admin/roles",
       component: UsersList,
     },
@@ -30,6 +37,14 @@ const router = createRouter({
     {
       path: "/admin/add-role",
       component: RolesForm,
+    },
+    {
+      path: "/admin/edit-user/:userId",
+      component: UserEditForm,
+    },
+    {
+      path: "/admin/edit-role/:userId",
+      component: RoleEdit,
     },
     {
       path: "/admin/delete-user/:userId",
