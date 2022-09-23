@@ -5,23 +5,27 @@
     >
     <ul>
       <li v-for="user in users" :key="user._id">
-        <div class="card">
-          <p>{{ user.firstName + " " + user.lastName }}</p>
-          <p>{{ user.email }}</p>
-          <Button :name="user.role" color="rgb(0, 195, 255)" />
-          <div class="actions">
-            <form
-              @submit="deleteUser(user._id)"
-              method="DELETE"
-              :action="`/admin/delete-user/${user._id}`"
-            >
-              <Button name="Delete" color="#F11E1B" type="submit" />
-              <router-link to="/admin/edit-user" class="btn btn-success"
-                >Edit</router-link
+        <router-link :to="`/admin/users/${user._id}`">
+          <div class="card">
+            <p>{{ user.firstName + " " + user.lastName }}</p>
+            <p>{{ user.email }}</p>
+            <div class="actions">
+              <Button :name="user.role" color="rgb(0, 195, 255)" class="ml" />
+              <form
+                @submit="deleteUser(user._id)"
+                method="DELETE"
+                :action="`/admin/delete-user/${user._id}`"
               >
-            </form>
+                <Button name="Delete" color="#F11E1B" type="submit" />
+                <router-link
+                  :to="`/admin/edit-user/${user._id}`"
+                  class="btn btn-success"
+                  >Edit</router-link
+                >
+              </form>
+            </div>
           </div>
-        </div>
+        </router-link>
       </li>
     </ul>
   </div>
@@ -74,6 +78,13 @@ ul {
   flex-direction: column;
   margin-top: 20px;
 }
+.actions {
+  display: flex;
+  flex-direction: row;
+}
+.ml {
+  margin-right: 100px;
+}
 .card {
   display: flex;
   justify-content: space-between;
@@ -91,7 +102,10 @@ ul {
 li {
   list-style: none;
 }
-
+a {
+  text-decoration: none;
+  color: #000;
+}
 .btn {
   border-radius: 10px;
   cursor: pointer;
