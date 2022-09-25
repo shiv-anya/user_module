@@ -36,6 +36,23 @@ exports.getSingleUser = (req, res, next) => {
     })
     .catch((err) => console.log(err));
 };
+
+exports.getSingleRole = (req, res, next) => {
+  Role.find({ _id: req.params.roleId })
+    .exec()
+    .then((result) => {
+      if (result.length < 1) {
+        return res.status(400).json({
+          message: "Role not Found",
+        });
+      }
+      return res.status(200).json({
+        role: result[0],
+      });
+    })
+    .catch((err) => console.log(err));
+};
+
 exports.createUser = (req, res, next) => {
   const firstName = req.body.firstName;
   const lastName = req.body.lastName;
@@ -64,16 +81,19 @@ exports.createRole = (req, res, next) => {
   const name = req.body.name;
   const member = req.body.member;
   let quantity;
+  let newMember;
   console.log(member);
   if (Object.keys(member).length === 0) {
     quantity = 0;
+    newMember = [];
   } else {
     quantity = 1;
+    newMember = [member];
   }
   const role = new Role({
     name: name,
     members: {
-      users: [member],
+      users: newMember,
       quantity: quantity,
     },
   });
@@ -86,29 +106,6 @@ exports.createRole = (req, res, next) => {
     })
     .catch((err) => console.log(err));
 };
-
-// exports.getEditProduct = (req, res, next) => {
-//   const editMode = req.query.edit;
-//   if (!editMode) {
-//     console.log("edit mode not given. Sorry");
-//     return res.redirect("/");
-//   }
-//   const prodId = req.params.productId;
-//   Product.findById(prodId)
-//     .then((product) => {
-//       if (!product) {
-//         console.log("no product found, sorry. Redirecting");
-//         return res.redirect("/");
-//       }
-//       res.render("admin/edit-product", {
-//         pageTitle: "Edit Product",
-//         path: "/admin/edit-product",
-//         editing: editMode,
-//         product: product,
-//       });
-//     })
-//     .catch((err) => console.log(err));
-// };
 
 exports.updateUser = (req, res, next) => {
   const userId = req.params.userId;
@@ -138,9 +135,43 @@ exports.updateUser = (req, res, next) => {
     .catch((err) => console.log(err));
 };
 
-exports.deleteUser = (req, res, next) => {
-  const id = req.params.userId;
-  User.remove({ _id: id })
+exports.addUserToRole = async (req, res, next) => {
+  console.log("patch");
+  const roleId = req.params.roleId;
+  const updatedName = req.body.name;
+  const newMember = req.body.members;
+  const role = await Role.findOne({ _id: roleId });
+  let updatedMembers = [...role.members.users];
+  let updatedQuantity;
+  if (updatedMembers.length !== 0) {
+    const memberIndex = role.members.users.findIndex(
+      (user) => user._id.toString() === newMember._id.toString()
+    );
+    if (memberIndex >= 0) return;
+  }
+  updatedMembers.push(newMember);
+  updatedQuantity = role.members.quantity + 1;
+  role.members.users = updatedMembers;
+  role.members.quantity = updatedQuantity;
+  role.name = updatedName;
+  role.save();
+  const user = await User.findOne({ _id: newMember._id });
+  user.role = role.name;
+  user.save();
+};
+
+exports.deleteUser = async (req, res, next) => {
+  const userId = req.params.userId;
+  const user = await User.findOne({ _id: userId });
+  const roleName = user.role;
+  const role = await Role.findOne({ name: roleName });
+  const newMembers = role.members.users.filter(
+    (user) => user._id.toString() !== userId.toString()
+  );
+  role.members.users = newMembers;
+  role.members.quantity--;
+  role.save();
+  User.remove({ _id: userId })
     .exec()
     .then((result) => {
       res
@@ -150,16 +181,37 @@ exports.deleteUser = (req, res, next) => {
     })
     .catch((err) => console.log(err));
 };
-exports.deleteRole = (req, res, next) => {
+exports.deleteRole = async (req, res, next) => {
   console.log("deleting role");
   const roleId = req.params.roleId;
-  Role.remove({ _id: roleId })
-    .exec()
+  const role = await Role.findOne({ _id: roleId });
+  const updatedMembers = role.members.users.map((user) => user._id);
+  let i = 0;
+  while (i < updatedMembers.length) {
+    const user = await User.findOne({ _id: updatedMembers[i] });
+    user.role = "";
+    user.save();
+    i++;
+  }
+  Role.findByIdAndRemove(roleId)
     .then((result) => {
-      res
-        .status(200)
-        .json({ message: "User Deleted" })
-        .redirect("/admin/roles");
+      res.status(200).json({ message: "User Deleted" });
     })
     .catch((err) => console.log(err));
+};
+exports.deleteUserFromRole = async (req, res, next) => {
+  console.log("deleting user from role");
+  const userId = req.params.userId;
+  const roleId = req.params.roleId;
+  const role = await Role.findOne({ _id: roleId });
+  const updatedMembers = role.members.users.filter(
+    (user) => user._id.toString() !== userId.toString()
+  );
+  const updatedQuantity = role.members.quantity - 1;
+  role.members.users = updatedMembers;
+  role.members.quantity = updatedQuantity;
+  role.save();
+  const user = await User.findOne({ _id: userId });
+  user.role = "";
+  user.save();
 };
