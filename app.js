@@ -52,9 +52,8 @@ mongoose
   )
   .then(() => {
     console.log("here");
-    app.listen(4000);
+    app.listen(3000);
   })
   .catch((err) => {
-    console.log("here too");
     console.log(err);
   });
