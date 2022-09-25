@@ -43,7 +43,7 @@ const router = createRouter({
       component: UserEditForm,
     },
     {
-      path: "/admin/edit-role/:userId",
+      path: "/admin/roles/:roleId",
       component: RoleEdit,
     },
     {
