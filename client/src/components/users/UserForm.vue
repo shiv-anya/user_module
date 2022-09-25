@@ -74,7 +74,7 @@ export default {
   methods: {
     addUser() {
       axios
-        .post("http://localhost:4000/admin/add-user", {
+        .post("http://localhost:3000/admin/add-user", {
           firstName: this.firstName,
           lastName: this.lastName,
           email: this.email,
@@ -94,8 +94,8 @@ export default {
           console.log(err);
         });
     },
-    getResults() {
-      fetch("http://localhost:4000/admin/roles")
+    getRoles() {
+      fetch("http://localhost:3000/admin/roles")
         .then((res) => res.json())
         .then((data) => {
           this.roles = [...data];
@@ -107,7 +107,7 @@ export default {
     Button,
   },
   created() {
-    this.getResults();
+    this.getRoles();
   },
 };
 </script>
@@ -124,7 +124,7 @@ export default {
 .outer {
   width: 900px;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
 }
 .inner {
   display: flex;

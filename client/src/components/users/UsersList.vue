@@ -5,27 +5,35 @@
     >
     <ul>
       <li v-for="user in users" :key="user._id">
-        <router-link :to="`/admin/users/${user._id}`">
-          <div class="card">
-            <p>{{ user.firstName + " " + user.lastName }}</p>
-            <p>{{ user.email }}</p>
-            <div class="actions">
-              <Button :name="user.role" color="rgb(0, 195, 255)" class="ml" />
-              <form
-                @submit="deleteUser(user._id)"
-                method="DELETE"
-                :action="`/admin/delete-user/${user._id}`"
-              >
-                <Button name="Delete" color="#F11E1B" type="submit" />
-                <router-link
-                  :to="`/admin/edit-user/${user._id}`"
-                  class="btn btn-success"
-                  >Edit</router-link
-                >
-              </form>
+        <div class="card">
+          <router-link :to="`/admin/users/${user._id}`">
+            <div class="user-info">
+              <p>{{ user.firstName + " " + user.lastName }}</p>
+              <div class="email">
+                <p>{{ user.email }}</p>
+                <Button
+                  v-if="user.role !== ''"
+                  :name="user.role"
+                  color="rgb(0, 195, 255)"
+                />
+              </div>
             </div>
+          </router-link>
+          <div class="actions">
+            <form
+              @submit="deleteUser(user._id)"
+              method="DELETE"
+              :action="`/admin/delete-user/${user._id}`"
+            >
+              <Button name="Delete" color="#F11E1B" type="submit" class="z" />
+              <router-link
+                :to="`/admin/edit-user/${user._id}`"
+                class="btn btn-success"
+                >Edit</router-link
+              >
+            </form>
           </div>
-        </router-link>
+        </div>
       </li>
     </ul>
   </div>
@@ -45,7 +53,7 @@ export default {
   },
   methods: {
     getResults() {
-      fetch("http://localhost:4000/admin/users")
+      fetch("http://localhost:3000/admin/users")
         .then((res) => res.json())
         .then((data) => {
           this.users = [...data.users];
@@ -53,7 +61,7 @@ export default {
         .catch((err) => console.log(err));
     },
     deleteUser(userId) {
-      fetch(`http://localhost:4000/admin/delete-user/${userId}`, {
+      fetch(`http://localhost:3000/admin/delete-user/${userId}`, {
         method: "DELETE",
       })
         .then((res) => res.json())
@@ -121,5 +129,15 @@ a {
 }
 .btn-success {
   background-color: #81f11b;
+}
+.user-info {
+  width: 500px;
+  display: flex;
+  justify-content: space-between;
+}
+.email {
+  width: 300px;
+  display: flex;
+  justify-content: space-between;
 }
 </style>

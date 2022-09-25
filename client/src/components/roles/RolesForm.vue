@@ -14,7 +14,12 @@
         <div class="inner">
           <label for="users">Users</label>
           <select name="users" id="users" v-model="member">
-            <option v-for="user in users" :value="user" :key="user._id">
+            <option
+              v-for="user in users"
+              :value="user"
+              :key="user._id"
+              :aria-placeholder="{}"
+            >
               {{ user.firstName + " " + user.lastName }}
             </option>
           </select>
@@ -38,7 +43,7 @@ export default {
   },
   methods: {
     getUsers() {
-      fetch("http://localhost:4000/admin/users")
+      fetch("http://localhost:3000/admin/users")
         .then((res) => res.json())
         .then((data) => {
           console.log(data.users);
@@ -48,13 +53,13 @@ export default {
     },
     addRole() {
       axios
-        .post("http://localhost:4000/admin/add-role", {
+        .post("http://localhost:3000/admin/add-role", {
           name: this.roleName,
           member: this.member,
         })
         .then((data) => {
           this.roleName = "";
-          this.member = "";
+          this.member = {};
         })
         .catch((err) => {
           console.log(err);

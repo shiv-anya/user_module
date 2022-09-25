@@ -5,7 +5,11 @@
       <p>Last Name: {{ user.lastName }}</p>
       <p>Email: {{ user.email }}</p>
       <p>Access Type: {{ user.accessType }}</p>
-      <Button :name="user.role" color="rgb(0,195,255)" />
+      <Button
+        v-if="user.role !== ''"
+        :name="user.role"
+        color="rgb(0,195,255)"
+      />
     </div>
   </div>
 </template>
@@ -21,7 +25,7 @@ export default {
   methods: {
     getUser() {
       // ${this.$route.params.userId}
-      fetch(`http://localhost:4000/admin/users/${this.$route.params.userId}`)
+      fetch(`http://localhost:3000/admin/users/${this.$route.params.userId}`)
         .then((res) => res.json())
         .then((data) => {
           this.user = data.user;

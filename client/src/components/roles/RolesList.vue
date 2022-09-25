@@ -12,9 +12,7 @@
               :action="`/admin/delete-role/${role._id}`"
             >
               <Button class="btn" name="Delete" color="#F11E1B" type="submit" />
-              <router-link :to="`/admin/edit-role/${role._id}`"
-                >Manage</router-link
-              >
+              <router-link :to="`/admin/roles/${role._id}`">Manage</router-link>
             </form>
           </div>
         </div>
@@ -36,7 +34,7 @@ export default {
   },
   methods: {
     getResults() {
-      fetch("http://localhost:4000/admin/roles")
+      fetch("http://localhost:3000/admin/roles")
         .then((res) => res.json())
         .then((data) => {
           this.roles = [...data];
@@ -44,7 +42,7 @@ export default {
         .catch((err) => console.log(err));
     },
     deleteRole(roleId) {
-      fetch(`http://localhost:4000/admin/delete-role/${roleId}`, {
+      fetch(`http://localhost:3000/admin/delete-role/${roleId}`, {
         method: "DELETE",
       })
         .then((res) => res.json())

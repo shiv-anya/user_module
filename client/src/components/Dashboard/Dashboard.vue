@@ -21,7 +21,7 @@ export default {
   },
   methods: {
     getResults() {
-      fetch("http://localhost:4000/admin/users")
+      fetch("http://localhost:3000/admin/users")
         .then((res) => res.json())
         .then((data) => {
           this.quantity = [...data.users].length;
