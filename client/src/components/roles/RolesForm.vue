@@ -20,7 +20,14 @@
               :key="user._id"
               :aria-placeholder="{}"
             >
-              {{ user.firstName + " " + user.lastName }}
+              {{
+                user.firstName +
+                " " +
+                user.lastName +
+                " (" +
+                `${user.role ? user.role : "No Role"}` +
+                ")"
+              }}
             </option>
           </select>
         </div>

@@ -60,30 +60,39 @@ exports.createUser = async (req, res, next) => {
   const password = req.body.password;
   const role = req.body.role;
   const accessType = req.body.accessType;
-  const user = new User({
-    firstName: firstName,
-    lastName: lastName,
-    email: email,
-    password: password,
-    role: role,
-    accessType: accessType,
-  });
-  console.log(role);
-  const roleFound = await Role.find({ name: role });
-  const updatedMembers = [...roleFound[0].members.users];
-  updatedMembers.push(user);
-  roleFound[0].members.users = [...updatedMembers];
-  roleFound[0].members.quantity++;
-  roleFound[0].save();
-  user
-    .save()
-    .then((result) => {
-      res.redirect("/admin/users");
-    })
-    .catch((err) => console.log(err));
+  const userIsThere = await User.findOne({ email: email });
+  console.log(userIsThere);
+  if (!userIsThere) {
+    const user = new User({
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      password: password,
+      role: role,
+      accessType: accessType,
+    });
+    if (role !== "") {
+      const roleFound = await Role.find({ name: role });
+      const updatedMembers = [...roleFound[0].members.users];
+      updatedMembers.push(user);
+      roleFound[0].members.users = [...updatedMembers];
+      roleFound[0].members.quantity++;
+      roleFound[0].save();
+    }
+    user
+      .save()
+      .then((result) => {
+        res.redirect("/admin/users");
+      })
+      .catch((err) => console.log(err));
+  } else {
+    res.json({
+      message: "user already present",
+    });
+  }
 };
 
-exports.createRole = (req, res, next) => {
+exports.createRole = async (req, res, next) => {
   console.log("creating role");
   const name = req.body.name;
   const member = req.body.member;
@@ -96,6 +105,11 @@ exports.createRole = (req, res, next) => {
   } else {
     quantity = 1;
     newMember = [member];
+  }
+  if (newMember.length !== 0) {
+    const user = await User.findOne({ _id: member._id });
+    user.role = name;
+    user.save();
   }
   const role = new Role({
     name: name,
@@ -123,7 +137,16 @@ exports.updateUser = (req, res, next) => {
   const updatedRole = req.body.role;
   const updatedAccessType = req.body.accessType;
   User.findById(userId)
-    .then((user) => {
+    .then(async (user) => {
+      const roleToDelete = await Role.findOne({ name: user.role });
+      if (roleToDelete) {
+        const updatedMembers = roleToDelete.members.users.filter(
+          (user) => user._id !== userId
+        );
+        roleToDelete.members.users = [...updatedMembers];
+        roleToDelete.members.quantity--;
+        roleToDelete.save();
+      }
       user.firstName = updatedFirstName;
       user.lastName = updatedLastName;
       user.email = updatedEmail;
@@ -131,8 +154,12 @@ exports.updateUser = (req, res, next) => {
       user.role = updatedRole;
       user.accessType = updatedAccessType;
       user.save();
+      const roleToUpdate = await Role.findOne({ name: updatedRole });
+      roleToUpdate.members.users.push(user);
+      roleToUpdate.members.quantity++;
+      roleToUpdate.save();
     })
-    .then((user) => {
+    .then(async (user) => {
       console.log("Updated product ");
       res.json({
         message: "updated user",
@@ -143,28 +170,33 @@ exports.updateUser = (req, res, next) => {
 };
 
 exports.addUserToRole = async (req, res, next) => {
-  console.log("patch");
   const roleId = req.params.roleId;
   const updatedName = req.body.name;
   const newMember = req.body.members;
   const role = await Role.findOne({ _id: roleId });
   let updatedMembers = [...role.members.users];
   let updatedQuantity;
-  if (updatedMembers.length !== 0) {
-    const memberIndex = role.members.users.findIndex(
+  let i = 0;
+  while (i < updatedMembers.length) {
+    const user = await User.findOne({ _id: updatedMembers[i]._id });
+    user.role = updatedName;
+    user.save();
+    i++;
+  }
+  if (updatedMembers.length !== 0 && newMember !== undefined) {
+    const memberIndex = updatedMembers.findIndex(
       (user) => user._id.toString() === newMember._id.toString()
     );
     if (memberIndex >= 0) return;
   }
-  updatedMembers.push(newMember);
-  updatedQuantity = role.members.quantity + 1;
-  role.members.users = updatedMembers;
-  role.members.quantity = updatedQuantity;
+  if (newMember !== undefined && Object.keys(newMember) !== 0) {
+    updatedMembers.push(newMember);
+    updatedQuantity = role.members.quantity + 1;
+    role.members.users = updatedMembers;
+    role.members.quantity = updatedQuantity;
+  }
   role.name = updatedName;
   role.save();
-  const user = await User.findOne({ _id: newMember._id });
-  user.role = role.name;
-  user.save();
 };
 
 exports.deleteUser = async (req, res, next) => {

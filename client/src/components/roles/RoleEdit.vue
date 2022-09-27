@@ -13,7 +13,7 @@
         </div>
         <div class="inner">
           <label for="users">Users</label>
-          <select name="users" id="users" v-model="members">
+          <select name="users" id="users" v-model="member">
             <option v-for="user in users" :value="user" :key="user._id">
               {{
                 user.firstName +
@@ -61,6 +61,7 @@ export default {
     return {
       users: [],
       roleName: "",
+      member: {},
       members: {},
     };
   },
@@ -69,10 +70,7 @@ export default {
       fetch("http://localhost:3000/admin/users")
         .then((res) => res.json())
         .then((data) => {
-          const users = data.users.filter(
-            (user) => user.role === this.roleName
-          );
-          this.members = [...users];
+          this.users = [...data.users];
         })
         .catch((err) => console.log(err));
     },
@@ -91,12 +89,12 @@ export default {
           `http://localhost:3000/admin/roles/${this.$route.params.roleId}`,
           {
             name: this.roleName,
-            members: this.members,
+            member: this.member,
           }
         )
         .then((data) => {
           this.roleName = "";
-          this.members = "";
+          this.members = {};
         })
         .catch((err) => {
           console.log(err);

@@ -1,5 +1,3 @@
-const path = require("path");
-
 const express = require("express");
 
 const adminController = require("../controllers/admin");
@@ -12,6 +10,7 @@ router.get("/users", adminController.readUsers);
 router.get("/users/:userId", adminController.getSingleUser);
 
 //Users Routes if user is admin
+
 router.post("/add-user", adminController.createUser);
 
 router.patch("/edit-user/:userId", adminController.updateUser);

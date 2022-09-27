@@ -67,7 +67,7 @@ export default {
     upadateUser() {
       axios
         .patch(
-          `http://localhost:4000/admin/edit-user/${this.$route.params.userId}`,
+          `http://localhost:3000/admin/edit-user/${this.$route.params.userId}`,
           {
             firstName: this.firstName,
             lastName: this.lastName,
@@ -90,7 +90,7 @@ export default {
         });
     },
     getRoles() {
-      fetch("http://localhost:4000/admin/roles")
+      fetch("http://localhost:3000/admin/roles")
         .then((res) => res.json())
         .then((data) => {
           this.roles = [...data];
@@ -98,7 +98,7 @@ export default {
         .catch((err) => console.log(err));
     },
     getUserInfo() {
-      fetch(`http://localhost:4000/admin/users/${this.$route.params.userId}`)
+      fetch(`http://localhost:3000/admin/users/${this.$route.params.userId}`)
         .then((res) => res.json())
         .then((data) => {
           const user = data.user;
@@ -112,7 +112,7 @@ export default {
         .catch((err) => console.log(err));
     },
   },
-  created() {
+  mounted() {
     this.getRoles();
     this.getUserInfo();
   },
