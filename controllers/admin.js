@@ -53,7 +53,7 @@ exports.getSingleRole = (req, res, next) => {
     .catch((err) => console.log(err));
 };
 
-exports.createUser = (req, res, next) => {
+exports.createUser = async (req, res, next) => {
   const firstName = req.body.firstName;
   const lastName = req.body.lastName;
   const email = req.body.email;
@@ -68,6 +68,13 @@ exports.createUser = (req, res, next) => {
     role: role,
     accessType: accessType,
   });
+  console.log(role);
+  const roleFound = await Role.find({ name: role });
+  const updatedMembers = [...roleFound[0].members.users];
+  updatedMembers.push(user);
+  roleFound[0].members.users = [...updatedMembers];
+  roleFound[0].members.quantity++;
+  roleFound[0].save();
   user
     .save()
     .then((result) => {
@@ -164,13 +171,15 @@ exports.deleteUser = async (req, res, next) => {
   const userId = req.params.userId;
   const user = await User.findOne({ _id: userId });
   const roleName = user.role;
-  const role = await Role.findOne({ name: roleName });
-  const newMembers = role.members.users.filter(
-    (user) => user._id.toString() !== userId.toString()
-  );
-  role.members.users = newMembers;
-  role.members.quantity--;
-  role.save();
+  if (roleName !== "") {
+    const role = await Role.findOne({ name: roleName });
+    const newMembers = role.members.users.filter(
+      (user) => user._id.toString() !== userId.toString()
+    );
+    role.members.users = newMembers;
+    role.members.quantity--;
+    role.save();
+  }
   User.remove({ _id: userId })
     .exec()
     .then((result) => {

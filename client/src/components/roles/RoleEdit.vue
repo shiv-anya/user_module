@@ -69,7 +69,10 @@ export default {
       fetch("http://localhost:3000/admin/users")
         .then((res) => res.json())
         .then((data) => {
-          this.users = [...data.users];
+          const users = data.users.filter(
+            (user) => user.role === this.roleName
+          );
+          this.members = [...users];
         })
         .catch((err) => console.log(err));
     },
