@@ -1,5 +1,5 @@
 <template>
-  <Navigation />
+  <Navigation @logout="logout" />
   <main>
     <router-view></router-view>
   </main>
@@ -12,6 +12,19 @@ export default {
   components: {
     Navigation,
   },
+  methods: {
+    logout() {
+      axios
+        .post("http://localhost:3000/logout")
+        .then((data) => {
+          console.log(data);
+          console.log(this.$store.state.isLoggedIn);
+          this.$store.state.isLoggedIn = false;
+          console.log(this.$store.state.isLoggedIn);
+        })
+        .catch((err) => console.log(err));
+    },
+  },
 };
 </script>
 
@@ -21,5 +34,4 @@ export default {
   padding: 0;
   box-sizing: border-box;
 }
-
 </style>
