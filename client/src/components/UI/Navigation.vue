@@ -2,21 +2,58 @@
   <header>
     <nav>
       <ul>
-        <li><router-link to="/">Dashboard</router-link></li>
+        <li><router-link class="bb" to="/">Dashboard</router-link></li>
         <li>
-          <router-link to="/admin/users">Users</router-link>
+          <router-link class="bb" to="/admin/users">Users</router-link>
         </li>
-        <li><router-link to="/admin/roles">Roles</router-link></li>
+        <li><router-link class="bb" to="/admin/roles">Roles</router-link></li>
       </ul>
-      <Button name="Login" color="rgb(0, 195, 255)" />
+      <router-link v-if="!isLoggedIn" to="/login"
+        ><Button name="Login" color="rgb(0, 195, 255)"></Button
+      ></router-link>
+      <router-link v-if="!isLoggedIn" to="/signup"
+        ><Button name="Sign Up" color="rgb(0, 195, 255)"></Button
+      ></router-link>
+      <form
+        @submit.prevent="logout"
+        v-if="isLoggedIn"
+        action="/logout"
+        method="POST"
+      >
+        <Button
+          @click="logout"
+          name="Logout"
+          color="rgb(0, 195, 255)"
+          type="submit"
+        />
+      </form>
     </nav>
   </header>
 </template>
 
 <script>
+import axios from "axios";
 import Button from "./Button.vue";
 export default {
   components: { Button },
+  methods: {
+    logout() {
+      axios
+        .post("http://localhost:3000/logout")
+        .then((data) => {
+          console.log(data);
+          console.log(this.$store.state.isLoggedIn);
+          this.$store.state.isLoggedIn = false;
+          console.log(this.$store.state.isLoggedIn);
+        })
+        .catch((err) => console.log(err));
+    },
+  },
+  computed: {
+    isLoggedIn() {
+      return this.$store.state.isLoggedIn;
+    },
+  },
 };
 </script>
 
@@ -50,11 +87,10 @@ button {
   border-radius: 5px;
   margin-right: 15px;
 }
-
-a.active {
+.bb.active {
   border-bottom: 5px rgb(0, 195, 255) solid;
 }
-a:hover {
+.bb:hover {
   border-bottom: 5px rgb(0, 195, 255) solid;
 }
 </style>
