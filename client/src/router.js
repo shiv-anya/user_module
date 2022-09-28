@@ -8,11 +8,16 @@ import RolesForm from "./components/roles/RolesForm";
 import UserInfo from "./components/users/UserInfo";
 import UserEditForm from "./components/users/UserEditForm";
 import RoleEdit from "./components/roles/RoleEdit";
+import Login from "./components/auth/Login";
+import SignUp from "./components/auth/SignUp";
 
 const router = createRouter({
   history: createWebHistory(),
   routes: [
     { path: "/", component: Dashboard },
+    { path: "/login", component: Login },
+    { path: "/signup", component: SignUp },
+    { path: "/logout", component: Login },
     {
       name: "roles",
       path: "/admin/roles",
