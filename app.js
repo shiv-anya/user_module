@@ -9,6 +9,7 @@ const app = express();
 const morgan = require("morgan");
 const cors = require("cors");
 const adminRoutes = require("./routes/admin");
+const authRoutes = require("./routes/auth");
 // const userRoutes = require("./routes/user");
 // const errorController = require("./controllers/error");
 const User = require("./models/user");
@@ -41,6 +42,7 @@ app.use((req, res, next) => {
 //     .catch((err) => console.log(err));
 // });
 
+app.use(authRoutes);
 app.use("/admin", adminRoutes);
 // app.use(userRoutes);
 
