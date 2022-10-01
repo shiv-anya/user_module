@@ -1,57 +1,46 @@
 <template>
   <header>
     <nav>
-      <ul>
-        <li><router-link class="bb" to="/">Dashboard</router-link></li>
-        <li>
-          <router-link class="bb" to="/admin/users">Users</router-link>
-        </li>
-        <li><router-link class="bb" to="/admin/roles">Roles</router-link></li>
-      </ul>
-      <router-link v-if="!isLoggedIn" to="/login"
-        ><Button name="Login" color="rgb(0, 195, 255)"></Button
-      ></router-link>
-      <router-link v-if="!isLoggedIn" to="/signup"
-        ><Button name="Sign Up" color="rgb(0, 195, 255)"></Button
-      ></router-link>
-      <form
-        @submit.prevent="logout"
-        v-if="isLoggedIn"
-        action="/logout"
-        method="POST"
-      >
-        <Button
-          @click="logout"
-          name="Logout"
-          color="rgb(0, 195, 255)"
-          type="submit"
-        />
-      </form>
+      <h2 v-if="isLoggedIn">{{ name }}</h2>
+      <div>
+        <ul>
+          <li><router-link class="bb" to="/">Dashboard</router-link></li>
+          <li>
+            <router-link class="bb" to="/admin/users">Users</router-link>
+          </li>
+          <li><router-link class="bb" to="/admin/roles">Roles</router-link></li>
+        </ul>
+        <router-link v-if="!isLoggedIn" to="/login"
+          ><Button name="Login" color="rgb(0, 195, 255)"></Button
+        ></router-link>
+        <router-link v-if="!isLoggedIn" to="/signup"
+          ><Button name="Sign Up" color="rgb(0, 195, 255)"></Button
+        ></router-link>
+        <form
+          @submit.prevent="$emit('logout')"
+          v-if="isLoggedIn"
+          action="/logout"
+          method="POST"
+        >
+          <Button name="Logout" color="rgb(0, 195, 255)" type="submit" />
+        </form>
+      </div>
     </nav>
   </header>
 </template>
 
 <script>
-import axios from "axios";
 import Button from "./Button.vue";
 export default {
   components: { Button },
-  methods: {
-    logout() {
-      axios
-        .post("http://localhost:3000/logout")
-        .then((data) => {
-          console.log(data);
-          console.log(this.$store.state.isLoggedIn);
-          this.$store.state.isLoggedIn = false;
-          console.log(this.$store.state.isLoggedIn);
-        })
-        .catch((err) => console.log(err));
-    },
-  },
   computed: {
     isLoggedIn() {
       return this.$store.state.isLoggedIn;
+    },
+    name() {
+      return (
+        this.$store.state.user.firstName + " " + this.$store.state.user.lastName
+      );
     },
   },
 };
@@ -65,13 +54,22 @@ nav {
   justify-content: end;
   align-content: center;
   align-items: center;
+  color: #fff;
 }
+
 nav ul {
   display: flex;
 }
+nav div {
+  width: 85vw;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: end;
+}
 nav ul li {
   list-style: none;
-  margin: 0 2rem 0 2rem;
+  margin: 0 3rem 0 3rem;
 }
 a {
   padding: 27px 10px;

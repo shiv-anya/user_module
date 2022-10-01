@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <p v-if="roles.length === 0">No users yet.</p>
     <ul>
       <li v-for="role in roles" :key="role._id">
         <div class="card">
@@ -7,11 +8,17 @@
           <p>{{ role.name }}</p>
           <div class="actions">
             <form
-              @submit="deleteRole(role._id)"
+              @submit.prevent="deleteRole(role._id)"
               method="DELETE"
               :action="`/admin/delete-role/${role._id}`"
             >
-              <Button class="btn" name="Delete" color="#F11E1B" type="submit" />
+              <Button
+                v-if="isAdmin"
+                class="btn"
+                name="Delete"
+                color="#F11E1B"
+                type="submit"
+              />
               <router-link :to="`/admin/roles/${role._id}`">Manage</router-link>
             </form>
           </div>
@@ -45,13 +52,18 @@ export default {
       fetch(`http://localhost:3000/admin/delete-role/${roleId}`, {
         method: "DELETE",
       })
-        .then((res) => res.json())
+        .then((res) => this.getResults())
         .then((data) => console.log(data))
         .catch((err) => console.log(err));
     },
   },
   mounted() {
     this.getResults();
+  },
+  computed: {
+    isAdmin() {
+      return this.$store.state.isAdmin;
+    },
   },
 };
 </script>

@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <form @submit="editRole" method="PATCH" action="">
+    <form v-if="isAdmin" @submit.prevent="editRole" method="PATCH" action="">
       <div class="outer">
         <div class="inner">
           <label for="rolename">Role Name</label>
@@ -29,7 +29,8 @@
       </div>
       <Button name="Submit" color="rgb(0,195,255)" type="submit" />
     </form>
-    <div class="members">
+    <p v-if="members.length === 0">No users in this role yet.</p>
+    <div class="members" v-if="members.length > 0">
       <ul>
         <li v-for="member in members" :key="member._id">
           <div class="card" v-if="member.firstName !== undefined">
@@ -39,7 +40,7 @@
             </div>
             <div class="actions">
               <form
-                @submit="deleteUserFromRole(member._id)"
+                @submit.prevent="deleteUserFromRole(member._id)"
                 method="DELETE"
                 action=""
               >
@@ -79,11 +80,12 @@ export default {
         .delete(
           `http://localhost:3000/admin/roles/${this.$route.params.roleId}/${userId}`
         )
-        .then((res) => res.json())
+        .then((res) => this.getRoleInfo())
         .then((data) => console.log(data))
         .catch((err) => console.log(err));
     },
     editRole() {
+      console.log(this.member._id);
       axios
         .patch(
           `http://localhost:3000/admin/roles/${this.$route.params.roleId}`,
@@ -93,6 +95,7 @@ export default {
           }
         )
         .then((data) => {
+          this.getRoleInfo();
           this.roleName = "";
           this.members = {};
         })
@@ -117,6 +120,11 @@ export default {
   mounted() {
     this.getUsers();
     this.getRoleInfo();
+  },
+  computed: {
+    isAdmin() {
+      return this.$store.state.isAdmin;
+    },
   },
 };
 </script>

@@ -7,6 +7,7 @@
 
 <script>
 import Navigation from "./components/UI/Navigation.vue";
+import axios from "axios";
 export default {
   name: "App",
   components: {
@@ -18,9 +19,12 @@ export default {
         .post("http://localhost:3000/logout")
         .then((data) => {
           console.log(data);
+          this.$store.state.user = {};
+          // console.log(this.$store.state.user);
           console.log(this.$store.state.isLoggedIn);
           this.$store.state.isLoggedIn = false;
           console.log(this.$store.state.isLoggedIn);
+          this.$router.push("/login");
         })
         .catch((err) => console.log(err));
     },

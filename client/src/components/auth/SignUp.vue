@@ -66,11 +66,11 @@ export default {
           password: this.password,
         })
         .then((data) => {
-          console.log(data);
           this.firstName = "";
           this.lastName = "";
           this.email = "";
           this.password = "";
+          this.$router.push("/login");
         })
         .catch((err) => {
           console.log(err);

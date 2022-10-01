@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <router-link to="/admin/add-role">Add Role</router-link>
+    <router-link v-if="isAdmin" to="/admin/add-role">Add Role</router-link>
     <RolesList />
   </div>
 </template>
@@ -12,6 +12,11 @@ export default {
   components: {
     RolesList,
     Button,
+  },
+  computed: {
+    isAdmin() {
+      return this.$store.state.isAdmin;
+    },
   },
 };
 </script>

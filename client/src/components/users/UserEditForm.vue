@@ -84,6 +84,7 @@ export default {
           this.password = "";
           this.role = "";
           this.accessType = "";
+          this.$router.push("/admin/users");
         })
         .catch((err) => {
           console.log(err);

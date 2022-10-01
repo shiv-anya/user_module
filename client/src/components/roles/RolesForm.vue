@@ -48,6 +48,7 @@ export default {
       member: {},
     };
   },
+
   methods: {
     getUsers() {
       fetch("http://localhost:3000/admin/users")
@@ -67,6 +68,7 @@ export default {
         .then((data) => {
           this.roleName = "";
           this.member = {};
+          this.$router.push("/admin/roles");
         })
         .catch((err) => {
           console.log(err);

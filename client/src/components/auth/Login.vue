@@ -43,12 +43,18 @@ export default {
           password: this.password,
         })
         .then((data) => {
+          const user = data.data.user;
+          this.$store.state.user = user;
+          user.accessType === "user"
+            ? (this.$store.state.isAdmin = false)
+            : (this.$store.state.isAdmin = true);
           if (data.token !== "") {
             console.log(this.$store.state.isLoggedIn);
             this.$store.state.isLoggedIn = true;
             this.email = "";
             this.password = "";
             console.log(this.$store.state.isLoggedIn);
+            this.$router.push("/");
           }
         })
         .catch((err) => {

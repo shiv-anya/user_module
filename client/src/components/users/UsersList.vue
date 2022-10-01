@@ -1,8 +1,9 @@
 <template>
   <div class="container">
-    <router-link to="/admin/add-user" class="btn btn-primary"
+    <router-link v-if="isAdmin" to="/admin/add-user" class="btn btn-primary"
       >Add user</router-link
     >
+    <p v-if="users.length === 0">No users yet.</p>
     <ul>
       <li v-for="user in users" :key="user._id">
         <div class="card">
@@ -21,12 +22,19 @@
           </router-link>
           <div class="actions">
             <form
-              @submit="deleteUser(user._id)"
+              @submit.prevent="deleteUser(user._id)"
               method="DELETE"
               :action="`/admin/delete-user/${user._id}`"
             >
-              <Button name="Delete" color="#F11E1B" type="submit" class="z" />
+              <Button
+                v-if="isAdmin"
+                name="Delete"
+                color="#F11E1B"
+                type="submit"
+                class="z"
+              />
               <router-link
+                v-if="isAdmin"
                 :to="`/admin/edit-user/${user._id}`"
                 class="btn btn-success"
                 >Edit</router-link
@@ -64,13 +72,18 @@ export default {
       fetch(`http://localhost:3000/admin/delete-user/${userId}`, {
         method: "DELETE",
       })
-        .then((res) => res.json())
+        .then((res) => this.getResults())
         .then((data) => console.log(data))
         .catch((err) => console.log(err));
     },
   },
   mounted() {
     this.getResults();
+  },
+  computed: {
+    isAdmin() {
+      return this.$store.state.isAdmin;
+    },
   },
 };
 </script>
