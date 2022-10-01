@@ -2,6 +2,7 @@ const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { LocalStorage } = require("node-localstorage");
+const Session = require("../models/session");
 global.localStorage = new LocalStorage("./scratch");
 
 exports.postLogin = (req, res, next) => {
@@ -23,9 +24,16 @@ exports.postLogin = (req, res, next) => {
             expiresIn: "2h",
           });
           user.token = token;
-          user.save();
-          localStorage.setItem("user", JSON.stringify(user));
-          res.status(200).json(user);
+          user.save().then((data) => {
+            req.session.user = data;
+            req.session.save((err) => {
+              console.log(err);
+              res.json({
+                message: "logged in",
+                user: user,
+              });
+            });
+          });
         })
         .catch((err) => console.log(err));
     })
@@ -54,7 +62,9 @@ exports.postSignup = (req, res, next) => {
           return user.save();
         })
         .then((result) => {
-          res.redirect("/login");
+          res.json({
+            message: "signed up",
+          });
         });
     })
     .catch((err) => {
@@ -63,13 +73,13 @@ exports.postSignup = (req, res, next) => {
 };
 
 exports.postLogout = async (req, res, next) => {
-  const user = JSON.parse(localStorage.getItem("user"));
-  const retrievedUser = await User.findOne({ _id: user._id });
-  console.log("retrieved", retrievedUser);
-  retrievedUser.token = "";
-  retrievedUser.save();
-  localStorage.removeItem("user");
-  res.json({
-    message: "logged out",
+  const user = await User.findOne({ email: req.user.email });
+  user.token = "";
+  user.save().then(() => {
+    req.session.destroy((err) => {
+      res.json({
+        message: "logged out",
+      });
+    });
   });
 };

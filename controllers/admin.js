@@ -61,7 +61,6 @@ exports.createUser = async (req, res, next) => {
   const role = req.body.role;
   const accessType = req.body.accessType;
   const userIsThere = await User.findOne({ email: email });
-  console.log(userIsThere);
   if (!userIsThere) {
     const user = new User({
       firstName: firstName,
@@ -172,17 +171,10 @@ exports.updateUser = (req, res, next) => {
 exports.addUserToRole = async (req, res, next) => {
   const roleId = req.params.roleId;
   const updatedName = req.body.name;
-  const newMember = req.body.members;
+  const newMember = req.body.member;
   const role = await Role.findOne({ _id: roleId });
   let updatedMembers = [...role.members.users];
   let updatedQuantity;
-  let i = 0;
-  while (i < updatedMembers.length) {
-    const user = await User.findOne({ _id: updatedMembers[i]._id });
-    user.role = updatedName;
-    user.save();
-    i++;
-  }
   if (updatedMembers.length !== 0 && newMember !== undefined) {
     const memberIndex = updatedMembers.findIndex(
       (user) => user._id.toString() === newMember._id.toString()
@@ -191,12 +183,23 @@ exports.addUserToRole = async (req, res, next) => {
   }
   if (newMember !== undefined && Object.keys(newMember) !== 0) {
     updatedMembers.push(newMember);
+    let i = 0;
+    while (i < updatedMembers.length) {
+      const user = await User.findOne({ _id: updatedMembers[i]._id });
+      user.role = updatedName;
+      user.save();
+      i++;
+    }
     updatedQuantity = role.members.quantity + 1;
     role.members.users = updatedMembers;
     role.members.quantity = updatedQuantity;
   }
   role.name = updatedName;
-  role.save();
+  role.save().then(() => {
+    res.json({
+      message: "Updated user in roles",
+    });
+  });
 };
 
 exports.deleteUser = async (req, res, next) => {
@@ -236,10 +239,11 @@ exports.deleteRole = async (req, res, next) => {
   }
   Role.findByIdAndRemove(roleId)
     .then((result) => {
-      res.status(200).json({ message: "User Deleted" });
+      res.status(200).json({ message: "Role Deleted" });
     })
     .catch((err) => console.log(err));
 };
+
 exports.deleteUserFromRole = async (req, res, next) => {
   console.log("deleting user from role");
   const userId = req.params.userId;
@@ -254,5 +258,9 @@ exports.deleteUserFromRole = async (req, res, next) => {
   role.save();
   const user = await User.findOne({ _id: userId });
   user.role = "";
-  user.save();
+  user.save().then(() => {
+    res.json({
+      message: "user deleted from role",
+    });
+  });
 };
