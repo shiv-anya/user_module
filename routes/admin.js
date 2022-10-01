@@ -1,34 +1,38 @@
 const express = require("express");
 
 const adminController = require("../controllers/admin");
-
+const isAuth = require("../middleware/isAuth");
 const router = express.Router();
 
 //Users Routes if user is user only
-router.get("/users", adminController.readUsers);
+router.get("/users", isAuth, adminController.readUsers);
 
-router.get("/users/:userId", adminController.getSingleUser);
+router.get("/users/:userId", isAuth, adminController.getSingleUser);
 
 //Users Routes if user is admin
 
-router.post("/add-user", adminController.createUser);
+router.post("/add-user", isAuth, adminController.createUser);
 
-router.patch("/edit-user/:userId", adminController.updateUser);
+router.patch("/edit-user/:userId", isAuth, adminController.updateUser);
 
-router.delete("/delete-user/:userId", adminController.deleteUser);
+router.delete("/delete-user/:userId", isAuth, adminController.deleteUser);
 
 //Roles routes if user is user only
-router.get("/roles", adminController.readRoles);
+router.get("/roles", isAuth, adminController.readRoles);
 
-router.get("/roles/:roleId", adminController.getSingleRole);
+router.get("/roles/:roleId", isAuth, adminController.getSingleRole);
 
 //Roles routes for admin
-router.post("/add-role", adminController.createRole);
+router.post("/add-role", isAuth, adminController.createRole);
 
-router.delete("/roles/:roleId/:userId", adminController.deleteUserFromRole);
+router.delete(
+  "/roles/:roleId/:userId",
+  isAuth,
+  adminController.deleteUserFromRole
+);
 
-router.patch("/roles/:roleId", adminController.addUserToRole);
+router.patch("/roles/:roleId", isAuth, adminController.addUserToRole);
 
-router.delete("/delete-role/:roleId", adminController.deleteRole);
+router.delete("/delete-role/:roleId", isAuth, adminController.deleteRole);
 
 module.exports = router;
