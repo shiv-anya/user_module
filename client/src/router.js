@@ -11,6 +11,7 @@ import RoleEdit from "./components/roles/RoleEdit";
 import Login from "./components/auth/Login.vue";
 import SignUp from "./components/auth/SignUp.vue";
 import store from "./store";
+import NotFound from "../src/pages/NotFound";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -43,17 +44,17 @@ const router = createRouter({
     {
       path: "/admin/add-user",
       component: UserForm,
-      meta: { reqAuth: true },
+      meta: { reqAuth: true, reqAdmin: true },
     },
     {
       path: "/admin/add-role",
       component: RolesForm,
-      meta: { reqAuth: true },
+      meta: { reqAuth: true, reqAdmin: true },
     },
     {
       path: "/admin/edit-user/:userId",
       component: UserEditForm,
-      meta: { reqAuth: true },
+      meta: { reqAuth: true, reqAdmin: true },
     },
     {
       path: "/admin/roles/:roleId",
@@ -63,14 +64,14 @@ const router = createRouter({
     {
       path: "/admin/delete-user/:userId",
       component: UsersList,
-      meta: { reqAuth: true },
+      meta: { reqAuth: true, reqAdmin: true },
     },
     {
       path: "/admin/delete-role/:roleId",
       component: RolesPage,
-      meta: { reqAuth: true },
+      meta: { reqAuth: true, reqAdmin: true },
     },
-    // { path: '/:notFound(.*)', component: NotFound }
+    { path: "/:notFound(.*)", component: NotFound },
   ],
   linkActiveClass: "active",
 });
@@ -78,11 +79,16 @@ const router = createRouter({
 router.beforeEach((to, _, next) => {
   console.log("was here");
   const isLoggedIn = store.state.isLoggedIn;
+  const isAdmin = store.state.isAdmin;
   if (to.meta.reqAuth && isLoggedIn) {
     next();
   } else if (to.meta.reqAuth && !isLoggedIn) {
     next("/login");
   } else if (!to.meta.reqAuth && !isLoggedIn) {
+    next();
+  } else if (to.meta.reqAdmin && !isAdmin) {
+    next("/admin/users");
+  } else if (to.meta.reqAdmin && isAdmin) {
     next();
   }
 });
