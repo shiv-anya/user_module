@@ -1,12 +1,28 @@
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { LocalStorage } = require("node-localstorage");
 const Session = require("../models/session");
-global.localStorage = new LocalStorage("./scratch");
+const { initializeApp } = require("firebase/app");
+const {
+  getAuth,
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+} = require("firebase/auth");
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB-JZj6_7pLPkcQ_FrRJmvLowcMRpCYNsk",
+  authDomain: "user-module-26cf3.firebaseapp.com",
+  projectId: "user-module-26cf3",
+  storageBucket: "user-module-26cf3.appspot.com",
+  messagingSenderId: "27477975367",
+  appId: "1:27477975367:web:9094363df3b43558ddac62",
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
 exports.postLogin = (req, res, next) => {
-  const email = req.body.email;
+  const email = req.body.email.toLowerCase();
   const password = req.body.password;
 
   User.findOne({ email: email })
@@ -57,14 +73,25 @@ exports.postSignup = (req, res, next) => {
             firstName: firstName,
             lastName: lastName,
             password: hashedPassword,
-            email: email.toLowerCase(),
+            email: email,
           });
           return user.save();
         })
         .then((result) => {
-          res.json({
-            message: "signed up",
-          });
+          createUserWithEmailAndPassword(auth, email, password)
+            .then((user) => {
+              sendEmailVerification(auth.currentUser).then(() => {
+                alert(
+                  "Verification link sent to your email. Kinldy check to verify your account"
+                );
+              });
+              res.json({
+                message: "Signed up",
+              });
+            })
+            .catch((error) => {
+              console.log(error.message);
+            });
         });
     })
     .catch((err) => {
