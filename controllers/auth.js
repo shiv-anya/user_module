@@ -24,36 +24,46 @@ const auth = getAuth(app);
 exports.postLogin = (req, res, next) => {
   const email = req.body.email.toLowerCase();
   const password = req.body.password;
-
-  User.findOne({ email: email })
-    .then((user) => {
-      if (!user) {
-        return res.redirect("/signup");
+  auth.onAuthStateChanged((user) => {
+    console.log(user.emailVerified);
+    user.reload().then(() => {
+      console.log(user.emailVerified);
+      if (!user.emailVerified) {
+        console.log("not verified");
+        return;
+      } else {
+        User.findOne({ email: email })
+          .then((user) => {
+            if (!user) {
+              return res.redirect("/signup");
+            }
+            bcrypt
+              .compare(password, user.password)
+              .then((match) => {
+                if (!match) {
+                  return res.redirect("/login");
+                }
+                const token = jwt.sign({ email }, "johndoeasecretchef", {
+                  expiresIn: "2h",
+                });
+                user.token = token;
+                user.save().then((data) => {
+                  req.session.user = data;
+                  req.session.save((err) => {
+                    console.log(err);
+                    res.json({
+                      message: "logged in",
+                      user: user,
+                    });
+                  });
+                });
+              })
+              .catch((err) => console.log(err));
+          })
+          .catch((err) => console.log(err));
       }
-      bcrypt
-        .compare(password, user.password)
-        .then((match) => {
-          if (!match) {
-            return res.redirect("/login");
-          }
-          const token = jwt.sign({ email }, "johndoeasecretchef", {
-            expiresIn: "2h",
-          });
-          user.token = token;
-          user.save().then((data) => {
-            req.session.user = data;
-            req.session.save((err) => {
-              console.log(err);
-              res.json({
-                message: "logged in",
-                user: user,
-              });
-            });
-          });
-        })
-        .catch((err) => console.log(err));
-    })
-    .catch((err) => console.log(err));
+    });
+  });
 };
 
 exports.postSignup = (req, res, next) => {
@@ -81,9 +91,7 @@ exports.postSignup = (req, res, next) => {
           createUserWithEmailAndPassword(auth, email, password)
             .then((user) => {
               sendEmailVerification(auth.currentUser).then(() => {
-                alert(
-                  "Verification link sent to your email. Kinldy check to verify your account"
-                );
+                console.log("sent verification mail");
               });
               res.json({
                 message: "Signed up",
