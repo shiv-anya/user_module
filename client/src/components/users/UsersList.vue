@@ -153,4 +153,35 @@ a {
   display: flex;
   justify-content: space-between;
 }
+@media screen and (max-width: 600px) {
+  .container {
+    padding-top: 14rem;
+  }
+  li {
+    margin: 0 auto;
+  }
+  .card {
+    margin-bottom: 2rem;
+    flex-direction: column;
+    justify-content: space-evenly;
+    height: 30rem;
+    margin-left: 2rem;
+    font-size: 3.2rem;
+    width: 50rem;
+  }
+  .user-info {
+    flex-direction: column;
+  }
+  .email {
+    flex-direction: column;
+  }
+  .btn {
+    font-size: 3rem;
+    width: 300px;
+    margin-left: 2rem;
+  }
+  .card p {
+    margin-bottom: 2rem;
+  }
+}
 </style>

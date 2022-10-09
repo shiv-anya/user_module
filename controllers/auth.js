@@ -21,48 +21,54 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
+const login = (req, res, email, password) => {
+  User.findOne({ email: email })
+    .then((user) => {
+      if (!user) {
+        return res.redirect("/signup");
+      }
+      bcrypt
+        .compare(password, user.password)
+        .then((match) => {
+          if (!match) {
+            return res.redirect("/login");
+          }
+          const token = jwt.sign({ email }, "johndoeasecretchef", {
+            expiresIn: "2h",
+          });
+          user.token = token;
+          user.save().then((data) => {
+            req.session.user = data;
+            req.session.save((err) => {
+              console.log(err);
+              res.json({
+                message: "logged in",
+                user: user,
+              });
+            });
+          });
+        })
+        .catch((err) => console.log(err));
+    })
+    .catch((err) => console.log(err));
+};
+
 exports.postLogin = (req, res, next) => {
   const email = req.body.email.toLowerCase();
   const password = req.body.password;
   auth.onAuthStateChanged((user) => {
-    console.log(user.emailVerified);
-    user.reload().then(() => {
-      console.log(user.emailVerified);
-      if (!user.emailVerified) {
-        console.log("not verified");
-        return;
-      } else {
-        User.findOne({ email: email })
-          .then((user) => {
-            if (!user) {
-              return res.redirect("/signup");
-            }
-            bcrypt
-              .compare(password, user.password)
-              .then((match) => {
-                if (!match) {
-                  return res.redirect("/login");
-                }
-                const token = jwt.sign({ email }, "johndoeasecretchef", {
-                  expiresIn: "2h",
-                });
-                user.token = token;
-                user.save().then((data) => {
-                  req.session.user = data;
-                  req.session.save((err) => {
-                    console.log(err);
-                    res.json({
-                      message: "logged in",
-                      user: user,
-                    });
-                  });
-                });
-              })
-              .catch((err) => console.log(err));
-          })
-          .catch((err) => console.log(err));
-      }
-    });
+    if (user) {
+      user.reload().then(() => {
+        if (!user.emailVerified) {
+          console.log("not verified");
+          return;
+        } else {
+          login(req, res, email, password);
+        }
+      });
+    } else {
+      login(req, res, email, password);
+    }
   });
 };
 

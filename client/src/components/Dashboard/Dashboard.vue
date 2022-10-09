@@ -1,6 +1,8 @@
 <template>
-  <Card :value="quantity" title="Users" class="card" />
-  <RolesList />
+  <div class="container">
+    <Card :value="quantity" title="Users" class="card" />
+    <RolesList />
+  </div>
 </template>
 
   <script>
@@ -35,7 +37,12 @@ export default {
 };
 </script>
 
-  <style scoped>
+<style scoped>
+.container {
+  width: 1000px;
+  margin: 0 auto;
+  padding: 2rem 0;
+}
 .card {
   text-align: center;
   font-size: 2rem;

@@ -35,13 +35,14 @@
         <li v-for="member in members" :key="member._id">
           <div class="card" v-if="member.firstName !== undefined">
             <div class="member-info">
-              <p class="mr">{{ member.firstName + " " + member.lastName }}</p>
+              <p>{{ member.firstName + " " + member.lastName }}</p>
               <p>{{ member.email }}</p>
             </div>
             <div class="actions">
               <form
                 @submit.prevent="deleteUserFromRole(member._id)"
                 method="DELETE"
+                v-if="isAdmin"
                 action=""
               >
                 <Button name="Delete" color="#F11E1B" type="submit" />
@@ -129,7 +130,7 @@ export default {
 };
 </script>
     
-    <style scoped>
+<style scoped>
 .container {
   width: 1000px;
   margin: 0 auto;
@@ -198,5 +199,48 @@ a {
   width: 300px;
   justify-content: space-between;
   align-items: center;
+}
+@media screen and (max-width: 1000px) and (min-width: 600px) {
+  .container {
+    margin-left: 50px;
+  }
+}
+@media screen and (max-width: 600px) {
+  .container {
+    padding-top: 15rem;
+  }
+  .outer {
+    flex-direction: column;
+    font-size: 3rem;
+  }
+  form {
+    border-bottom: 5px solid #f4f4f4;
+    padding: 0 0 2rem 4rem;
+  }
+  .inner input {
+    font-size: 3rem;
+    width: 50rem;
+    padding: 1rem;
+    margin: 10px 0 10px 0;
+  }
+  .inner select {
+    font-size: 3rem;
+    width: 50rem;
+    padding: 1rem;
+    margin: 10px 0 2rem 0;
+  }
+  .inner option {
+    font-size: 1rem;
+  }
+  .card {
+    flex-direction: column;
+    justify-content: space-between;
+    height: 20rem;
+    margin-left: 2rem;
+    font-size: 3.2rem;
+  }
+  .member-info {
+    flex-direction: column;
+  }
 }
 </style>

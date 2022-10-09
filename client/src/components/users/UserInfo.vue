@@ -69,4 +69,12 @@ export default {
   margin-top: -10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
+@media screen and (max-width: 600px) {
+  .card {
+    margin-top: 70rem;
+    font-size: 3rem;
+    width: 50rem;
+    height: 40rem;
+  }
+}
 </style>

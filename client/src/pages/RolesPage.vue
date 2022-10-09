@@ -1,7 +1,9 @@
 <template>
-  <div class="container">
-    <router-link v-if="isAdmin" to="/admin/add-role">Add Role</router-link>
-    <RolesList />
+  <div class="mb">
+    <div class="container">
+      <router-link v-if="isAdmin" to="/admin/add-role">Add Role</router-link>
+      <RolesList />
+    </div>
   </div>
 </template>
 
@@ -38,5 +40,16 @@ a {
   color: #fff;
   margin-left: 15px;
   text-decoration: none;
+}
+@media screen and (max-width: 600px) {
+  a {
+    padding: 2rem 4rem;
+    width: 100px;
+    margin-left: 6rem;
+    font-size: 4rem;
+  }
+  .mb {
+    padding-top: 12rem;
+  }
 }
 </style>

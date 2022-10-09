@@ -112,4 +112,40 @@ a,
   border-radius: 20px;
   margin-top: 15px;
 }
+@media screen and (max-width: 600px) {
+  .container {
+    width: 100vw;
+    margin: 0 auto;
+  }
+  ul {
+    flex-direction: column;
+  }
+  li {
+    margin: 0 auto;
+  }
+  .card {
+    justify-content: center;
+    width: 50rem;
+    height: 40rem;
+    font-size: 6rem;
+    margin: 20px 0 20px 0;
+    padding: 1rem;
+  }
+  .card h3,
+  p {
+    margin-top: 20px;
+  }
+  form {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 40px;
+  }
+  a,
+  .btn {
+    font-size: 4rem;
+    width: 300px;
+    margin-left: 20px;
+  }
+}
 </style>

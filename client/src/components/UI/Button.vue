@@ -21,4 +21,10 @@ button {
   margin-right: 12px;
   color: #fff;
 }
+@media screen and (max-width: 600px) {
+  button {
+    font-size: 3rem;
+    width: 300px;
+  }
+}
 </style>

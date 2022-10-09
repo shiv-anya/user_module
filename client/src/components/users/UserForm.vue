@@ -147,4 +147,32 @@ input:focus {
   border: 3px solid rgb(0, 195, 255);
   border-radius: 5px;
 }
+@media screen and (max-width: 600px) {
+  .outer {
+    flex-direction: column;
+    font-size: 3rem;
+  }
+  .inner {
+    font-size: 3rem;
+  }
+  form {
+    border-bottom: 5px solid #f4f4f4;
+    padding: 0 0 2rem 4rem;
+  }
+  .inner input {
+    font-size: 3rem;
+    width: 50rem;
+    padding: 1rem;
+    margin: 10px 0 10px 0;
+  }
+  .inner select {
+    font-size: 3rem;
+    width: 50rem;
+    padding: 1rem;
+    margin: 10px 0 2rem 0;
+  }
+  .inner option {
+    font-size: 1rem;
+  }
+}
 </style>
