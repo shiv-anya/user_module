@@ -44,6 +44,8 @@ export default {
   },
   methods: {
     login() {
+      console.log(process.env);
+      console.log(process.env.APP_BASE_URL);
       axios
         .post(`${process.env.APP_BASE_URL}/login`, {
           email: this.email,

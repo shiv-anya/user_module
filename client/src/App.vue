@@ -16,7 +16,7 @@ export default {
   methods: {
     logout() {
       axios
-        .post("http://localhost:3000/logout")
+        .post(process.env.APP_BASE_URL + "/logout")
         .then((data) => {
           this.$store.state.user = {};
           this.$store.state.isLoggedIn = false;
