@@ -11,7 +11,6 @@ import RoleEdit from "./components/roles/RoleEdit";
 import Login from "./components/auth/Login.vue";
 import SignUp from "./components/auth/SignUp.vue";
 import store from "./store";
-import NotFound from "../src/pages/NotFound";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -71,7 +70,7 @@ const router = createRouter({
       component: RolesPage,
       meta: { reqAuth: true, reqAdmin: true },
     },
-    { path: "/:notFound(.*)", component: NotFound },
+    { path: "/:notFound(.*)", redirect: "/" },
   ],
   linkActiveClass: "active",
 });

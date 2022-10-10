@@ -126,7 +126,6 @@ exports.postSignup = (req, res, next) => {
 };
 
 exports.postLogout = async (req, res, next) => {
-  console.log(req.user);
   const user = await User.findOne({ email: req.user.email });
   user.token = "";
   user.save().then(() => {
