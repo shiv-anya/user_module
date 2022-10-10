@@ -45,7 +45,7 @@ export default {
   methods: {
     login() {
       axios
-        .post(`http://localhost:3000/login`, {
+        .post(`${process.env.APP_BASE_URL}/login`, {
           email: this.email,
           password: this.password,
         })

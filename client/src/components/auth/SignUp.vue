@@ -63,7 +63,7 @@ export default {
   methods: {
     signup() {
       axios
-        .post(`http://localhost:3000/signup`, {
+        .post(`${process.env.APP_BASE_URL}/signup`, {
           firstName: this.firstName,
           lastName: this.lastName,
           email: this.email,
