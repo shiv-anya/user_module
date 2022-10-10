@@ -32,6 +32,7 @@
     <script>
 import Button from "../UI/Button.vue";
 import axios from "axios";
+
 export default {
   components: {
     Button,
@@ -45,9 +46,9 @@ export default {
   methods: {
     login() {
       console.log(process.env);
-      console.log(process.env.APP_BASE_URL);
+      console.log(process.env.VUE_APP_BASE_URL);
       axios
-        .post(`${process.env.APP_BASE_URL}/login`, {
+        .post(`${process.env.VUE_APP_BASE_URL}/login`, {
           email: this.email,
           password: this.password,
         })
