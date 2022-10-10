@@ -8,6 +8,7 @@ const {
   createUserWithEmailAndPassword,
   sendEmailVerification,
 } = require("firebase/auth");
+const { json } = require("body-parser");
 
 const firebaseConfig = {
   apiKey: "AIzaSyB-JZj6_7pLPkcQ_FrRJmvLowcMRpCYNsk",
@@ -25,7 +26,9 @@ const login = (req, res, email, password) => {
   User.findOne({ email: email })
     .then((user) => {
       if (!user) {
-        return res.redirect("/signup");
+        return res.json({
+          message: "Email doesn't exist",
+        });
       }
       bcrypt
         .compare(password, user.password)
@@ -53,20 +56,26 @@ const login = (req, res, email, password) => {
     .catch((err) => console.log(err));
 };
 
-exports.postLogin = (req, res, next) => {
+exports.postLogin = async (req, res, next) => {
   const email = req.body.email.toLowerCase();
   const password = req.body.password;
+  const mainUser = await User.findOne({ email: email });
   auth.onAuthStateChanged((user) => {
     if (user) {
       user.reload().then(() => {
         if (!user.emailVerified) {
           console.log("not verified");
-          return;
+          return res.json({
+            message: "Not verified",
+          });
         } else {
-          login(req, res, email, password);
+          mainUser.isVerified = true;
+          mainUser.save().then(() => {
+            login(req, res, email, password);
+          });
         }
       });
-    } else {
+    } else if (mainUser.isVerified) {
       login(req, res, email, password);
     }
   });
@@ -80,7 +89,9 @@ exports.postSignup = (req, res, next) => {
   User.findOne({ email: email })
     .then((user) => {
       if (user) {
-        return res.redirect("/signup");
+        return res.json({
+          message: "Email already exist.",
+        });
       }
       bcrypt
         .hash(password, 12)
@@ -97,14 +108,15 @@ exports.postSignup = (req, res, next) => {
           createUserWithEmailAndPassword(auth, email, password)
             .then((user) => {
               sendEmailVerification(auth.currentUser).then(() => {
-                console.log("sent verification mail");
-              });
-              res.json({
-                message: "Signed up",
+                res.json({
+                  message: "Sent verification mail",
+                });
               });
             })
             .catch((error) => {
-              console.log(error.message);
+              res.json({
+                message: error.message,
+              });
             });
         });
     })
@@ -114,6 +126,7 @@ exports.postSignup = (req, res, next) => {
 };
 
 exports.postLogout = async (req, res, next) => {
+  console.log(req.user);
   const user = await User.findOne({ email: req.user.email });
   user.token = "";
   user.save().then(() => {

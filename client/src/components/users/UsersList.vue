@@ -64,7 +64,11 @@ export default {
       fetch("http://localhost:3000/admin/users")
         .then((res) => res.json())
         .then((data) => {
-          this.users = [...data.users];
+          const users = [...data.users];
+          const presentUsers = users.filter((user) => {
+            return user.email !== this.$store.state.user.email;
+          });
+          this.users = presentUsers;
         })
         .catch((err) => console.log(err));
     },

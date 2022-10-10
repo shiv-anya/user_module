@@ -8,6 +8,7 @@
           id="email"
           v-model.trim="email"
           placeholder="Email"
+          required
         />
         <input
           type="password"
@@ -15,8 +16,14 @@
           id="password"
           v-model.trim="password"
           placeholder="Password"
+          required
         />
-        <Button class="btn" name="Login" color="rgb(0,195,255)" type="submit" />
+        <Button
+          class="btn"
+          name="Login"
+          color="rgb(0,195,255)"
+          type="submit"
+        ></Button>
       </div>
     </form>
   </div>
@@ -43,6 +50,7 @@ export default {
           password: this.password,
         })
         .then((data) => {
+          window.alert(data.data.message);
           const user = data.data.user;
           this.$store.state.user = user;
           user.accessType === "user"
@@ -101,5 +109,20 @@ input:focus {
   width: 250px;
   margin: 0;
   margin-top: 10px;
+}
+@media screen and (max-width: 600px) {
+  .container {
+    padding-top: 40rem;
+  }
+  .outer {
+    height: 30rem;
+    width: 45rem;
+  }
+  .outer input {
+    font-size: 3rem;
+    width: 40rem;
+    padding: 1rem;
+    margin: 10px 0 10px 0;
+  }
 }
 </style>

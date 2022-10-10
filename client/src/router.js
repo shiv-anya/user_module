@@ -77,7 +77,6 @@ const router = createRouter({
 });
 
 router.beforeEach((to, _, next) => {
-  console.log("was here");
   const isLoggedIn = store.state.isLoggedIn;
   const isAdmin = store.state.isAdmin;
   if (to.meta.reqAuth && isLoggedIn) {

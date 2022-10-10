@@ -17,10 +17,10 @@
           <li><router-link class="bb" to="/admin/roles">Roles</router-link></li>
         </ul>
         <router-link v-if="!isLoggedIn" to="/login"
-          ><Button name="Login" color="rgb(0, 195, 255)"></Button
+          ><Button class="btn" name="Login" color="#fff"></Button
         ></router-link>
         <router-link v-if="!isLoggedIn" to="/signup"
-          ><Button name="Sign Up" color="rgb(0, 195, 255)"></Button
+          ><Button class="btn" name="Sign Up" color="#fff"></Button
         ></router-link>
         <form
           @submit.prevent="$emit('logout')"
@@ -43,13 +43,17 @@
             <router-link class="bb" to="/admin/users">Users</router-link>
           </li>
           <li><router-link class="bb" to="/admin/roles">Roles</router-link></li>
+          <li>
+            <router-link v-if="!isLoggedIn" to="/login"
+              ><Button name="Login" color="rgb(0, 195, 255)"></Button
+            ></router-link>
+          </li>
+          <li>
+            <router-link v-if="!isLoggedIn" to="/signup"
+              ><Button name="Sign Up" color="rgb(0, 195, 255)"></Button
+            ></router-link>
+          </li>
         </ul>
-        <router-link v-if="!isLoggedIn" to="/login"
-          ><Button name="Login" color="rgb(0, 195, 255)"></Button
-        ></router-link>
-        <router-link v-if="!isLoggedIn" to="/signup"
-          ><Button name="Sign Up" color="rgb(0, 195, 255)"></Button
-        ></router-link>
         <form
           @submit.prevent="$emit('logout')"
           v-if="isLoggedIn"
@@ -116,6 +120,8 @@ nav {
 
 nav ul {
   display: flex;
+  justify-content: end;
+  align-items: center;
 }
 nav div {
   width: 85vw;
@@ -126,10 +132,9 @@ nav div {
 }
 nav ul li {
   list-style: none;
-  margin: 0 3rem 0 3rem;
+  margin: 0 1rem 0 1rem;
 }
 a {
-  padding: 27px 10px;
   color: #fff;
   font-size: 1rem;
   text-decoration: none;
@@ -140,7 +145,10 @@ button {
   border: none;
   padding: 10px 15px;
   border-radius: 5px;
-  margin-right: 15px;
+  /* margin-right: 15px; */
+}
+.bb {
+  padding: 10px 27px;
 }
 .bb.active {
   border-bottom: 5px rgb(0, 195, 255) solid;
@@ -192,6 +200,9 @@ button {
     font-size: 4rem;
     color: #000;
     border: none;
+  }
+  .btn {
+    color: #000;
   }
 }
 </style>

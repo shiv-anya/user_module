@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <p v-if="roles.length === 0">No users yet.</p>
+    <p v-if="roles.length === 0">No getRoles yet.</p>
     <ul>
       <li v-for="role in roles" :key="role._id">
         <div class="card">

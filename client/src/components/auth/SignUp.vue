@@ -8,6 +8,7 @@
           id="firstname"
           v-model.trim="firstName"
           placeholder="First Name"
+          required
         />
         <input
           type="text"
@@ -15,6 +16,7 @@
           id="lastname"
           v-model.trim="lastName"
           placeholder="Last Name"
+          required
         />
         <input
           type="email"
@@ -22,6 +24,7 @@
           id="email"
           v-model.trim="email"
           placeholder="Email"
+          required
         />
         <input
           type="password"
@@ -29,6 +32,7 @@
           id="password"
           v-model.trim="password"
           placeholder="Password"
+          required
         />
         <Button
           class="btn"
@@ -66,6 +70,7 @@ export default {
           password: this.password,
         })
         .then((data) => {
+          window.alert(data.data.message);
           this.firstName = "";
           this.lastName = "";
           this.email = "";
@@ -116,5 +121,20 @@ input:focus {
   width: 250px;
   margin: 0;
   margin-top: 10px;
+}
+@media screen and (max-width: 600px) {
+  .container {
+    padding-top: 40rem;
+  }
+  .outer {
+    height: 40rem;
+    width: 45rem;
+  }
+  .outer input {
+    font-size: 3rem;
+    width: 40rem;
+    padding: 1rem;
+    margin: 10px 0 10px 0;
+  }
 }
 </style>

@@ -44,9 +44,9 @@ a {
 @media screen and (max-width: 600px) {
   a {
     padding: 2rem 4rem;
-    width: 100px;
     margin-left: 6rem;
-    font-size: 4rem;
+    font-size: 3rem;
+    width: 300px;
   }
   .mb {
     padding-top: 12rem;

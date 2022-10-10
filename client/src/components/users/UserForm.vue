@@ -148,6 +148,9 @@ input:focus {
   border-radius: 5px;
 }
 @media screen and (max-width: 600px) {
+  .container {
+    padding-top: 18rem;
+  }
   .outer {
     flex-direction: column;
     font-size: 3rem;

@@ -18,12 +18,8 @@ export default {
       axios
         .post("http://localhost:3000/logout")
         .then((data) => {
-          console.log(data);
           this.$store.state.user = {};
-          // console.log(this.$store.state.user);
-          console.log(this.$store.state.isLoggedIn);
           this.$store.state.isLoggedIn = false;
-          console.log(this.$store.state.isLoggedIn);
           this.$router.push("/login");
         })
         .catch((err) => console.log(err));
