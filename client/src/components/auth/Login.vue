@@ -48,7 +48,7 @@ export default {
       console.log(process.env);
       console.log(process.env.VUE_APP_BASE_URL);
       axios
-        .post(`${process.env.VUE_APP_BASE_URL}/login`, {
+        .post(`https://user-module22.herokuapp.com/login`, {
           email: this.email,
           password: this.password,
         })
