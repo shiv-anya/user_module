@@ -5,8 +5,8 @@ const bodyParser = require("body-parser");
 const session = require("express-session");
 const MongoDBStore = require("connect-mongodb-session")(session);
 const cookieParser = require("cookie-parser");
-
 const mongoose = require("mongoose");
+require("dotenv").config();
 
 const app = express();
 const morgan = require("morgan");
@@ -14,10 +14,10 @@ const cors = require("cors");
 const adminRoutes = require("./routes/admin");
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/user");
-// const errorController = require("./controllers/error");
+
 const User = require("./models/user");
 const store = new MongoDBStore({
-  uri: "mongodb+srv://sg90883:sg90883@cluster0.rthcyyk.mongodb.net/userModule?retryWrites=true&w=majority",
+  uri: process.env.DB_URI,
   collection: "sessions",
 });
 app.use(morgan("dev"));
@@ -43,34 +43,25 @@ const oneHour = 1000 * 60 * 60;
 app.use(cookieParser());
 app.use(
   session({
-    secret: "thisismysecrctekeyfhrgfgrfrty84fwir767",
+    secret: process.env.SESSIONS_SECRET,
     saveUninitialized: false,
     cookie: { maxAge: oneHour },
     resave: true,
     store: store,
   })
 );
-// app.use((req, res, next) => {
-//   User.findById("6327529f6254e697e3639158")
-//     .then((user) => {
-//       req.user = user;
-//       next();
-//     })
-//     .catch((err) => console.log(err));
-// });
+
 app.use(authRoutes);
 app.use("/admin", adminRoutes);
-// app.use(userRoutes);
-
-// app.use(errorController.get404);
-
+app.use(userRoutes);
 mongoose
   .connect(
     "mongodb+srv://sg90883:sg90883@cluster0.rthcyyk.mongodb.net/userModule?retryWrites=true&w=majority"
   )
   .then(() => {
     console.log("here");
-    app.listen(3000);
+    console.log(process.env);
+    app.listen(process.env.PORT);
   })
   .catch((err) => {
     console.log(err);

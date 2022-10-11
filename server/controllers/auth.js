@@ -9,6 +9,7 @@ const {
   sendEmailVerification,
 } = require("firebase/auth");
 const { json } = require("body-parser");
+require("dotenv").config();
 
 const firebaseConfig = {
   apiKey: "AIzaSyB-JZj6_7pLPkcQ_FrRJmvLowcMRpCYNsk",
@@ -36,7 +37,7 @@ const login = (req, res, email, password) => {
           if (!match) {
             return res.redirect("/login");
           }
-          const token = jwt.sign({ email }, "johndoeasecretchef", {
+          const token = jwt.sign({ email }, process.env.JSONWEB_SECRET, {
             expiresIn: "2h",
           });
           user.token = token;
