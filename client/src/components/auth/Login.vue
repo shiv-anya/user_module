@@ -20,7 +20,7 @@
         />
         <Button
           class="btn"
-          name="Login"
+          :name="btnName"
           color="rgb(0,195,255)"
           type="submit"
         ></Button>
@@ -41,18 +41,19 @@ export default {
     return {
       email: "",
       password: "",
+      btnName: "Login",
     };
   },
   methods: {
     login() {
-      console.log(process.env);
-      console.log(process.env.VUE_APP_BASE_URL);
+      this.btnName = "Logging In...";
       axios
         .post(`${process.env.VUE_APP_BASE_URL}/login`, {
           email: this.email,
           password: this.password,
         })
         .then((data) => {
+          this.btnName = "Login";
           window.alert(data.data.message);
           const user = data.data.user;
           this.$store.state.user = user;

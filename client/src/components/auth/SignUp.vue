@@ -36,7 +36,7 @@
         />
         <Button
           class="btn"
-          name="Sign Up"
+          :name="btnName"
           color="rgb(0,195,255)"
           type="submit"
         />
@@ -58,10 +58,12 @@ export default {
       lastName: "",
       email: "",
       password: "",
+      btnName: "Sign Up",
     };
   },
   methods: {
     signup() {
+      this.btnName = "Signing up...";
       axios
         .post(`${process.env.VUE_APP_BASE_URL}/signup`, {
           firstName: this.firstName,
@@ -71,6 +73,7 @@ export default {
         })
         .then((data) => {
           window.alert(data.data.message);
+          this.btnName = "Sign Up";
           this.firstName = "";
           this.lastName = "";
           this.email = "";

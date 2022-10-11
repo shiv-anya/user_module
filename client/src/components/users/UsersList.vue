@@ -76,8 +76,11 @@ export default {
       fetch(`${process.env.VUE_APP_BASE_URL}/admin/delete-user/${userId}`, {
         method: "DELETE",
       })
-        .then((res) => this.getResults())
-        .then((data) => console.log(data))
+        .then((res) => {
+          this.getResults();
+          
+        })
+        .then((data) => window.alert(data.data.message))
         .catch((err) => console.log(err));
     },
   },
