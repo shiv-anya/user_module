@@ -23,7 +23,7 @@ export default {
   },
   methods: {
     getResults() {
-      fetch(`${process.env.APP_BASE_URL}/admin/users`)
+      fetch(`${process.env.VUE_APP_BASE_URL}/admin/users`)
         .then((res) => res.json())
         .then((data) => {
           this.quantity = [...data.users].length;

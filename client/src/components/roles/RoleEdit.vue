@@ -69,7 +69,7 @@ export default {
   },
   methods: {
     getUsers() {
-      fetch("${process.env.APP_BASE_URL}/admin/users")
+      fetch(`${process.env.VUE_APP_BASE_URL}/admin/users`)
         .then((res) => res.json())
         .then((data) => {
           this.users = [...data.users];
@@ -79,7 +79,7 @@ export default {
     deleteUserFromRole(userId) {
       axios
         .delete(
-          `${process.env.APP_BASE_URL}/admin/roles/${this.$route.params.roleId}/${userId}`
+          `${process.env.VUE_APP_BASE_URL}/admin/roles/${this.$route.params.roleId}/${userId}`
         )
         .then((res) => this.getRoleInfo())
         .then((data) => console.log(data))
@@ -89,7 +89,7 @@ export default {
       console.log(this.member._id);
       axios
         .patch(
-          `${process.env.APP_BASE_URL}/admin/roles/${this.$route.params.roleId}`,
+          `${process.env.VUE_APP_BASE_URL}/admin/roles/${this.$route.params.roleId}`,
           {
             name: this.roleName,
             member: this.member,
@@ -106,7 +106,7 @@ export default {
     },
     getRoleInfo() {
       fetch(
-        `${process.env.APP_BASE_URL}/admin/roles/${this.$route.params.roleId}`
+        `${process.env.VUE_APP_BASE_URL}/admin/roles/${this.$route.params.roleId}`
       )
         .then((res) => res.json())
         .then((data) => {

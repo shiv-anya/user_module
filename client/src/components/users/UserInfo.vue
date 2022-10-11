@@ -25,7 +25,9 @@ export default {
   methods: {
     getUser() {
       // ${this.$route.params.userId}
-      fetch(`http://localhost:3000/admin/users/${this.$route.params.userId}`)
+      fetch(
+        `${process.env.VUE_APP_BASE_URL}/admin/users/${this.$route.params.userId}`
+      )
         .then((res) => res.json())
         .then((data) => {
           this.user = data.user;

@@ -61,7 +61,7 @@ export default {
   },
   methods: {
     getResults() {
-      fetch("http://localhost:3000/admin/users")
+      fetch(`${process.env.VUE_APP_BASE_URL}/admin/users`)
         .then((res) => res.json())
         .then((data) => {
           const users = [...data.users];
@@ -73,7 +73,7 @@ export default {
         .catch((err) => console.log(err));
     },
     deleteUser(userId) {
-      fetch(`http://localhost:3000/admin/delete-user/${userId}`, {
+      fetch(`${process.env.VUE_APP_BASE_URL}/admin/delete-user/${userId}`, {
         method: "DELETE",
       })
         .then((res) => this.getResults())

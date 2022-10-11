@@ -74,7 +74,7 @@ export default {
   methods: {
     addUser() {
       axios
-        .post("http://localhost:3000/admin/add-user", {
+        .post(`${process.env.VUE_APP_BASE_URL}/admin/add-user`, {
           firstName: this.firstName,
           lastName: this.lastName,
           email: this.email,
@@ -96,7 +96,7 @@ export default {
         });
     },
     getRoles() {
-      fetch("http://localhost:3000/admin/roles")
+      fetch(`${process.env.VUE_APP_BASE_URL}/admin/roles`)
         .then((res) => res.json())
         .then((data) => {
           this.roles = [...data];

@@ -16,7 +16,7 @@ export default {
   methods: {
     logout() {
       axios
-        .post(process.env.APP_BASE_URL + "/logout")
+        .post(`${process.env.VUE_APP_BASE_URL}/logout`)
         .then((data) => {
           this.$store.state.user = {};
           this.$store.state.isLoggedIn = false;

@@ -51,7 +51,7 @@ export default {
 
   methods: {
     getUsers() {
-      fetch(`${process.env.APP_BASE_URL}/admin/users`)
+      fetch(`${process.env.VUE_APP_BASE_URL}/admin/users`)
         .then((res) => res.json())
         .then((data) => {
           console.log(data.users);
@@ -61,7 +61,7 @@ export default {
     },
     addRole() {
       axios
-        .post(`${process.env.APP_BASE_URL}/admin/add-role`, {
+        .post(`${process.env.VUE_APP_BASE_URL}/admin/add-role`, {
           name: this.roleName,
           member: this.member,
         })

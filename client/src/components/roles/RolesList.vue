@@ -41,7 +41,7 @@ export default {
   },
   methods: {
     getResults() {
-      fetch(`${process.env.APP_BASE_URL}/admin/roles`)
+      fetch(`${process.env.VUE_APP_BASE_URL}/admin/roles`)
         .then((res) => res.json())
         .then((data) => {
           this.roles = [...data];
@@ -49,7 +49,7 @@ export default {
         .catch((err) => console.log(err));
     },
     deleteRole(roleId) {
-      fetch(`${process.env.APP_BASE_URL}/admin/delete-role/${roleId}`, {
+      fetch(`${process.env.VUE_APP_BASE_URL}/admin/delete-role/${roleId}`, {
         method: "DELETE",
       })
         .then((res) => this.getResults())
