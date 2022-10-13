@@ -9,6 +9,7 @@
             name="rolename"
             id="rolename"
             v-model.trim="roleName"
+            required
           />
         </div>
         <div class="inner">
@@ -32,6 +33,20 @@
           </select>
         </div>
       </div>
+      <div class="inner">
+        <label for="teamName">Team Name</label>
+        <select name="teams" id="teams" v-model="teamName">
+          <option
+            v-for="team in teams"
+            :value="team.name"
+            :key="team._id"
+            placeholder=""
+            required
+          >
+            {{ team.name }}
+          </option>
+        </select>
+      </div>
       <Button name="Submit" color="rgb(0,195,255)" type="submit" />
     </form>
   </div>
@@ -45,6 +60,8 @@ export default {
     return {
       users: [],
       roleName: "",
+      teamName: "",
+      teams: [],
       member: {},
     };
   },
@@ -54,19 +71,35 @@ export default {
       fetch(`${process.env.VUE_APP_BASE_URL}/admin/users`)
         .then((res) => res.json())
         .then((data) => {
-          console.log(data.users);
           this.users = [...data.users];
         })
         .catch((err) => console.log(err));
     },
+    getTeams() {
+      fetch(`${process.env.VUE_APP_BASE_URL}/admin/teams`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.length === 0) {
+            window.alert("Create teams to add role.");
+          }
+          this.teams = [...data];
+        })
+        .catch((err) => console.log(err));
+    },
     addRole() {
+      if (this.teamName === "") {
+        window.alert("Create teams to add role.");
+        return;
+      }
       axios
         .post(`${process.env.VUE_APP_BASE_URL}/admin/add-role`, {
           name: this.roleName,
           member: this.member,
+          teamName: this.teamName,
         })
         .then((data) => {
           this.roleName = "";
+          this.teamName = "";
           this.member = {};
           this.$router.push("/admin/roles");
         })
@@ -80,6 +113,7 @@ export default {
   },
   mounted() {
     this.getUsers();
+    this.getTeams();
   },
 };
 </script>

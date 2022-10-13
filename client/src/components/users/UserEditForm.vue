@@ -9,6 +9,7 @@
             name="firstname"
             id="firstname"
             v-model.trim="firstName"
+            required
           />
         </div>
         <div class="inner">
@@ -18,16 +19,23 @@
             name="lastname"
             id="lastname"
             v-model.trim="lastName"
+            required
           />
         </div>
       </div>
       <div class="inner">
         <label for="email">Email</label>
-        <input type="email" name="email" id="email" v-model.trim="email" />
+        <input
+          type="email"
+          name="email"
+          id="email"
+          v-model.trim="email"
+          required
+        />
       </div>
       <div class="inner">
         <label for="roles">Roles</label>
-        <select name="roles" id="roles" v-model="role">
+        <select name="roles" id="roles" v-model="role" required>
           <option v-for="role in roles" :value="role.name" :key="role._id">
             {{ role.name }}
           </option>
@@ -35,7 +43,12 @@
       </div>
       <div class="inner">
         <label for="accesstype">Access Type</label>
-        <select name="accesstype" id="accesstype" v-model.trim="accessType">
+        <select
+          name="accesstype"
+          id="accesstype"
+          v-model.trim="accessType"
+          required
+        >
           <option value="user">User</option>
           <option value="admin">Admin</option>
         </select>

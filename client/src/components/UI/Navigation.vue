@@ -14,6 +14,7 @@
           <li>
             <router-link class="bb" to="/admin/users">Users</router-link>
           </li>
+          <li><router-link class="bb" to="/admin/teams">Teams</router-link></li>
           <li><router-link class="bb" to="/admin/roles">Roles</router-link></li>
         </ul>
         <router-link v-if="!isLoggedIn" to="/login"
@@ -42,6 +43,7 @@
           <li>
             <router-link class="bb" to="/admin/users">Users</router-link>
           </li>
+          <li><router-link class="bb" to="/admin/teams">Teams</router-link></li>
           <li><router-link class="bb" to="/admin/roles">Roles</router-link></li>
           <li>
             <router-link v-if="!isLoggedIn" to="/login"
@@ -148,7 +150,7 @@ button {
   /* margin-right: 15px; */
 }
 .bb {
-  padding: 10px 27px;
+  padding: 27px 27px;
 }
 .bb.active {
   border-bottom: 5px rgb(0, 195, 255) solid;

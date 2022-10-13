@@ -78,7 +78,6 @@ export default {
       })
         .then((res) => {
           this.getResults();
-          
         })
         .then((data) => window.alert(data.data.message))
         .catch((err) => console.log(err));
@@ -120,10 +119,10 @@ ul {
   height: 80px;
   width: 1000px;
   font-size: 1rem;
-  background-color: #f4f4f4;
   padding: 1.5rem;
   border-radius: 10px;
   margin: 10px 0px;
+  background-color: #f4f4f4;
   box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px,
     rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
 }
@@ -154,11 +153,13 @@ a {
   width: 500px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 .email {
   width: 300px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 @media screen and (max-width: 600px) {
   .container {

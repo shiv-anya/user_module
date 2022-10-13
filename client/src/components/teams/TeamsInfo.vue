@@ -27,8 +27,8 @@
     </ul>
   </div>
 </template>
-
-<script>
+  
+  <script>
 import Button from "../UI/Button.vue";
 export default {
   components: {
@@ -44,7 +44,10 @@ export default {
       fetch(`${process.env.VUE_APP_BASE_URL}/admin/roles`)
         .then((res) => res.json())
         .then((data) => {
-          this.roles = [...data];
+          const allRoles = [...data].filter(
+            (role) => role.teamName === this.$route.params.teamName
+          );
+          this.roles = [...allRoles];
         })
         .catch((err) => console.log(err));
     },
@@ -67,8 +70,8 @@ export default {
   },
 };
 </script>
-
-<style scoped>
+  
+  <style scoped>
 .container {
   width: 1000px;
   margin: 0 auto;

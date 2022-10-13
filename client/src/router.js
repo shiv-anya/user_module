@@ -10,6 +10,9 @@ import UserEditForm from "./components/users/UserEditForm";
 import RoleEdit from "./components/roles/RoleEdit";
 import Login from "./components/auth/Login.vue";
 import SignUp from "./components/auth/SignUp.vue";
+import TeamsForm from "./components/teams/TeamsForm";
+import TeamsPage from "./pages/TeamsPage";
+import TeamInfo from "./components/teams/TeamsInfo";
 import store from "./store";
 
 const router = createRouter({
@@ -23,6 +26,12 @@ const router = createRouter({
       name: "roles",
       path: "/admin/roles",
       component: RolesPage,
+      meta: { reqAuth: true },
+    },
+    {
+      name: "teams",
+      path: "/admin/teams",
+      component: TeamsPage,
       meta: { reqAuth: true },
     },
     {
@@ -46,6 +55,11 @@ const router = createRouter({
       meta: { reqAuth: true, reqAdmin: true },
     },
     {
+      path: "/admin/add-team",
+      component: TeamsForm,
+      meta: { reqAuth: true, reqAdmin: true },
+    },
+    {
       path: "/admin/add-role",
       component: RolesForm,
       meta: { reqAuth: true, reqAdmin: true },
@@ -58,6 +72,11 @@ const router = createRouter({
     {
       path: "/admin/roles/:roleId",
       component: RoleEdit,
+      meta: { reqAuth: true },
+    },
+    {
+      path: "/admin/teams/:teamName",
+      component: TeamInfo,
       meta: { reqAuth: true },
     },
     {

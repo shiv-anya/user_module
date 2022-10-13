@@ -1,16 +1,16 @@
 <template>
   <div class="container">
-    <p v-if="roles.length === 0">No roles yet.</p>
+    <p v-if="teams.length === 0">No teams yet.</p>
     <ul>
-      <li v-for="role in roles" :key="role._id">
+      <li v-for="team in teams" :key="team._id">
         <div class="card">
-          <h3>{{ role.members.quantity }}</h3>
-          <p>{{ role.name }}</p>
+          <h3>{{ team.roleQuantity }}</h3>
+          <p>{{ team.name }}</p>
           <div class="actions">
             <form
-              @submit.prevent="deleteRole(role._id)"
+              @submit.prevent="deleteTeam(team._id)"
               method="DELETE"
-              :action="`/admin/delete-role/${role._id}`"
+              :action="`/admin/delete-team/${team._id}`"
             >
               <Button
                 v-if="isAdmin"
@@ -19,7 +19,9 @@
                 color="#F11E1B"
                 type="submit"
               />
-              <router-link :to="`/admin/roles/${role._id}`">Manage</router-link>
+              <router-link :to="`/admin/teams/${team.name}`"
+                >Manage</router-link
+              >
             </form>
           </div>
         </div>
@@ -36,29 +38,29 @@ export default {
   },
   data() {
     return {
-      roles: [],
+      teams: [],
     };
   },
   methods: {
-    getResults() {
-      fetch(`${process.env.VUE_APP_BASE_URL}/admin/roles`)
+    getTeams() {
+      fetch(`${process.env.VUE_APP_BASE_URL}/admin/teams`)
         .then((res) => res.json())
         .then((data) => {
-          this.roles = [...data];
+          this.teams = [...data];
         })
         .catch((err) => console.log(err));
     },
-    deleteRole(roleId) {
-      fetch(`${process.env.VUE_APP_BASE_URL}/admin/delete-role/${roleId}`, {
+    deleteTeam(teamId) {
+      fetch(`${process.env.VUE_APP_BASE_URL}/admin/delete-team/${teamId}`, {
         method: "DELETE",
       })
-        .then((res) => this.getResults())
+        .then((res) => this.getTeams())
         .then((data) => console.log(data))
         .catch((err) => console.log(err));
     },
   },
   mounted() {
-    this.getResults();
+    this.getTeams();
   },
   computed: {
     isAdmin() {
@@ -90,8 +92,10 @@ form {
   align-items: center;
   height: 200px;
   width: 300px;
-  font-size: 1.7rem;
-  background-color: rgb(0, 195, 255);
+  font-size: 2rem;
+  background-color: #f4f4f4;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px,
+    rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
   padding: 2rem;
   border-radius: 10px;
   margin: 0px 15px 10px 15px;
@@ -104,11 +108,11 @@ ul li button {
 }
 a,
 .btn {
-  background-color: #f4f4f4;
+  background-color: #81f11b;
   text-decoration: none;
   font-size: 1rem;
   padding: 10px 35px;
-  color: #000;
+  color: #fff;
   border-radius: 20px;
   margin-top: 15px;
 }
