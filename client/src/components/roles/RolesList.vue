@@ -116,6 +116,7 @@ a,
   .container {
     width: 100vw;
     margin: 0 auto;
+    font-size: 3rem;
   }
   ul {
     flex-direction: column;
@@ -130,6 +131,7 @@ a,
     font-size: 6rem;
     margin: 20px 0 20px 0;
     padding: 1rem;
+    text-align: center;
   }
   .card h3,
   p {

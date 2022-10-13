@@ -84,6 +84,7 @@ input:focus {
 @media screen and (max-width: 600px) {
   .container {
     padding-top: 18rem;
+    font-size: 3rem;
   }
   .outer {
     flex-direction: column;
