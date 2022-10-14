@@ -19,63 +19,90 @@ import store from "./store";
 const router = createRouter({
   history: createWebHistory(),
   routes: [
-    { path: "/", component: Dashboard, meta: { reqAuth: true } },
-    { path: "/login", component: Login, meta: { reqAuth: false } },
-    { path: "/signup", component: SignUp, meta: { reqAuth: false } },
-    { path: "/logout", component: Login, meta: { reqAuth: true } },
     {
-      name: "roles",
+      name: "Dashboard",
+      path: "/",
+      component: Dashboard,
+      meta: { reqAuth: true },
+    },
+    {
+      name: "Login",
+      path: "/login",
+      component: Login,
+      meta: { reqAuth: false },
+    },
+    {
+      name: "Sign Up",
+      path: "/signup",
+      component: SignUp,
+      meta: { reqAuth: false },
+    },
+    {
+      path: "/logout",
+      component: Login,
+      meta: { reqAuth: true },
+    },
+    {
+      name: "Roles",
       path: "/admin/roles",
       component: RolesPage,
       meta: { reqAuth: true },
     },
     {
-      name: "teams",
+      name: "Teams",
       path: "/admin/teams",
       component: TeamsPage,
       meta: { reqAuth: true },
     },
     {
+      name: "Users",
       path: "/admin/users",
       component: UsersList,
       meta: { reqAuth: true },
     },
     {
+      name: "User Info",
       path: "/admin/users/:userId",
       component: UserInfo,
       meta: { reqAuth: true },
     },
+    // {name: "Login",
+    //   path: "/admin/roles",
+    //   component: UsersList,
+    //   meta: { reqAuth: true },
+    // },
     {
-      path: "/admin/roles",
-      component: UsersList,
-      meta: { reqAuth: true },
-    },
-    {
+      name: "Add User",
       path: "/admin/add-user",
       component: UserForm,
       meta: { reqAuth: true, reqAdmin: true },
     },
     {
+      name: "Add Team",
       path: "/admin/add-team",
       component: TeamsForm,
       meta: { reqAuth: true, reqAdmin: true },
     },
     {
+      name: "Add Role",
       path: "/admin/add-role",
       component: RolesForm,
       meta: { reqAuth: true, reqAdmin: true },
     },
     {
+      name: "Edit User",
       path: "/admin/edit-user/:userId",
       component: UserEditForm,
       meta: { reqAuth: true, reqAdmin: true },
     },
     {
+      name: "Role Info",
       path: "/admin/roles/:roleId",
       component: RoleEdit,
       meta: { reqAuth: true },
     },
     {
+      name: "Teams Info",
       path: "/admin/teams/:teamName",
       component: TeamInfo,
       meta: { reqAuth: true },
@@ -90,12 +117,17 @@ const router = createRouter({
       component: RolesPage,
       meta: { reqAuth: true, reqAdmin: true },
     },
-    { path: "/:notFound(.*)", component: NotFound },
+    {
+      name: "User Mangagement Module",
+      path: "/:notFound(.*)",
+      component: NotFound,
+    },
   ],
   linkActiveClass: "active",
 });
 
 router.beforeEach((to, _, next) => {
+  document.title = to.name;
   const isLoggedIn = store.state.isLoggedIn;
   const isAdmin = store.state.isAdmin;
   if (to.meta.reqAuth && isLoggedIn) {
