@@ -119,6 +119,7 @@ a,
   .container {
     width: 100vw;
     margin: 0 auto;
+    padding-top: 16rem;
   }
   ul {
     flex-direction: column;

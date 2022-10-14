@@ -13,6 +13,7 @@ import SignUp from "./components/auth/SignUp.vue";
 import TeamsForm from "./components/teams/TeamsForm";
 import TeamsPage from "./pages/TeamsPage";
 import TeamInfo from "./components/teams/TeamsInfo";
+import NotFound from "./pages/NotFound";
 import store from "./store";
 
 const router = createRouter({
@@ -89,7 +90,7 @@ const router = createRouter({
       component: RolesPage,
       meta: { reqAuth: true, reqAdmin: true },
     },
-    { path: "/:notFound(.*)", redirect: "/" },
+    { path: "/:notFound(.*)", component: NotFound },
   ],
   linkActiveClass: "active",
 });
